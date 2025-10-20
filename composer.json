@@ -40,7 +40,7 @@
     },
     "require": {
         "spatie/laravel-data": "^4",
-        "laravel/framework": "^8|^9|^10|^11",
+        "laravel/framework": "^8|^9|^10|^11|^12",
         "phpdocumentor/reflection-docblock": "^5.4",
         "spatie/invade": "^2"
     },
