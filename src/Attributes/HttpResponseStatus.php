@@ -5,11 +5,9 @@ namespace Xolvio\OpenApiGenerator\Attributes;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class CustomContentType
+class HttpResponseStatus
 {
     public function __construct(
-        /** @var string[] $type */
-        public array $type,
-        public bool $isBinary = false
+        public int $status
     ) {}
 }
