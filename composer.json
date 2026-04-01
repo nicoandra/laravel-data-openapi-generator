@@ -22,7 +22,7 @@
             "email": "r.groot@xolvio.nl"
         }
     ],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "format": [
