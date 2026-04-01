@@ -1,5 +1,5 @@
 {
-    "name": "xolvio/laravel-data-openapi-generator",
+    "name": "nicoandra/laravel-data-openapi-generator",
     "description": "Generate OpenAPI specification from Laravel routes and Laravel Data objects.",
     "type": "library",
     "license": "MIT",
