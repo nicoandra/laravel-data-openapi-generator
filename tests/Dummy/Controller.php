@@ -94,4 +94,9 @@ class Controller extends LaravelController
     {
         return ContentTypeData::create($data);
     }
+
+    public function routeWithRouteParameter(RequestDataWithRouteParameter $requestData): ReturnData
+    {
+        return ReturnData::from(['message' => $requestData->routeParameter]);
+    }
 }

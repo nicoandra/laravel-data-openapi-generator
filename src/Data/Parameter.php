@@ -62,16 +62,26 @@ class Parameter extends Data
             fn (ReflectionParameter $parameter) => $parameter->getName() === $name,
         );
 
+        if($parameter) {
+            return new self(
+                name: $parameter->getName(),
+                in: 'path',
+                description: $parameter->getName(),
+                required: ! $parameter->isOptional(),
+                schema: Schema::fromParameterReflection($parameter),
+            );
+        }
+
         if (! $parameter) {
             throw new Exception("Parameter {$name} not found in method {$method->getName()}");
         }
+    }
 
-        return new self(
-            name: $parameter->getName(),
-            in: 'path',
-            description: $parameter->getName(),
-            required: ! $parameter->isOptional(),
-            schema: Schema::fromParameterReflection($parameter),
-        );
+
+    public static function fromRequestParameter(ReflectionParameter $parameter): self
+    {
+        // If the parameter is an instance of Laravel-Data, we should identify the property of that data class
+        
+
     }
 }

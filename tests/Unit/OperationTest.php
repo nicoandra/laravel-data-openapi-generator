@@ -166,3 +166,17 @@ it('can create operation with permissions description', function () {
             ->toBeInstanceOf(Response::class);
     }
 });
+
+
+it('can create operation with route parameters', function () {
+    $method = 'post';
+    $route  = new Route($method, '/{routeParameter}', [Controller::class, 'routeWithRouteParameter']);
+    $route->setContainer(app());
+
+    $operation = Operation::fromRoute($route, $method);
+
+    fwrite(STDERR, print_r($operation->parameters, TRUE));
+    expect($operation->parameters)
+        ->toBeNull('');
+
+});

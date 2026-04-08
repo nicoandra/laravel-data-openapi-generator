@@ -1,22 +1,19 @@
 services:
-  php:
-    container_name: laravel-data-openapi-generator
+  openapi-generator:
     build: 
       context: .
       dockerfile: Dockerfile
       target: dev
-    user: "${UID:-1000}"
-    command: php-fpm -F
-    hostname: laravel-data-openapi-generator
+    command: sleep infinity
     extra_hosts:
         - "host.docker.internal:host-gateway"
     environment:
-      COMPOSER_HOME: ~/.composer
-      COMPOSER_CACHE_DIR: ~/.composer/cache
+      PHP_EXTENSION_XDEBUG: 1
+      PHP_INI_XDEBUG__CLIENT_HOST: host.docker.internal
     restart: unless-stopped
-    working_dir: /var/www/
+    working_dir: /var/www/html
     volumes:
       - type: bind
         source: ./
-        target: /var/www
+        target: /var/www/html
 
