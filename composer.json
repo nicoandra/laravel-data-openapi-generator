@@ -40,7 +40,10 @@
         ],
         "test": [
             "vendor/bin/pest"
-        ]
+        ],
+        "test-docker": [
+            "docker-compose run --rm php vendor/bin/pest"
+        ]        
     },
     "require": {
         "spatie/laravel-data": "^4",
