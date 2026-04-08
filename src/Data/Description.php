@@ -8,7 +8,6 @@ class Description extends Data {
         public string $rawDescription
     ) {}
 
-
     public function asString(): string
     {
         $pattern = '#^\s*/\*\*|^\s*[\*]{1,2}|^\s*[\*]*/#m';

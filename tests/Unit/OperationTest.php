@@ -134,7 +134,7 @@ it('can create operation without description', function () {
     $operation = Operation::fromRoute($route, $method);
 
     expect($operation->description)
-        ->toBeNull();
+        ->toBe('');
 });
 it('can create operation with permissions description', function () {
     $method = 'post';

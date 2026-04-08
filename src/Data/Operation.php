@@ -75,7 +75,7 @@ class Operation extends Data
             $requestBody = null;
         }
 
-        $description = implode("\n", $descriptionLines);
+        $description = collect($descriptionLines)->map(fn($x) => trim($x))->filter(fn($x) => strlen($x) > 0)->join("\n");
 
         return self::from([
             'description' => $description,
