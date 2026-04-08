@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
-use Xolvio\OpenApiGenerator\Test\Controller;
+use NicoAndra\OpenApiGenerator\Test\Controller;
 
 beforeAll(function () {
     if (File::exists(config('openapi-generator.path'))) {

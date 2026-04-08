@@ -2,8 +2,8 @@
 
 use Illuminate\Routing\Route;
 use Spatie\LaravelData\Data;
-use Xolvio\OpenApiGenerator\Data\Content;
-use Xolvio\OpenApiGenerator\Data\RequestBody;
+use NicoAndra\OpenApiGenerator\Data\Content;
+use NicoAndra\OpenApiGenerator\Data\RequestBody;
 
 it('can create default content', function () {
     foreach (['requestBasic', 'allCombined'] as $function) {

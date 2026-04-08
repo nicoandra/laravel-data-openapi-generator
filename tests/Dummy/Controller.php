@@ -1,6 +1,6 @@
 <?php
 
-namespace Xolvio\OpenApiGenerator\Test;
+namespace NicoAndra\OpenApiGenerator\Test;
 
 use Illuminate\Routing\Controller as LaravelController;
 use Spatie\LaravelData\DataCollection;

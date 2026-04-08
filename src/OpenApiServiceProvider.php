@@ -1,9 +1,9 @@
 <?php
 
-namespace Xolvio\OpenApiGenerator;
+namespace NicoAndra\OpenApiGenerator;
 
 use Illuminate\Support\ServiceProvider;
-use Xolvio\OpenApiGenerator\Commands\GenerateOpenApiCommand;
+use NicoAndra\OpenApiGenerator\Commands\GenerateOpenApiCommand;
 
 class OpenApiServiceProvider extends ServiceProvider
 {

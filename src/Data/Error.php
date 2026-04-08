@@ -1,6 +1,6 @@
 <?php
 
-namespace Xolvio\OpenApiGenerator\Data;
+namespace NicoAndra\OpenApiGenerator\Data;
 
 use Spatie\LaravelData\Data;
 

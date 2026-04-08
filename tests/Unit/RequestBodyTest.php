@@ -2,8 +2,8 @@
 
 use Illuminate\Routing\Route;
 use Spatie\LaravelData\Data;
-use Xolvio\OpenApiGenerator\Data\OpenApi;
-use Xolvio\OpenApiGenerator\Data\RequestBody;
+use NicoAndra\OpenApiGenerator\Data\OpenApi;
+use NicoAndra\OpenApiGenerator\Data\RequestBody;
 
 it('can detect no request body', function () {
     foreach (['basic', 'intParameter', 'stringParameter', 'modelParameter', 'requestNoData'] as $function) {

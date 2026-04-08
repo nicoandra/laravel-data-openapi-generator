@@ -3,10 +3,10 @@
 use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
-use Xolvio\OpenApiGenerator\Data\Operation;
-use Xolvio\OpenApiGenerator\Data\RequestBody;
-use Xolvio\OpenApiGenerator\Data\Response;
-use Xolvio\OpenApiGenerator\Test\Controller;
+use NicoAndra\OpenApiGenerator\Data\Operation;
+use NicoAndra\OpenApiGenerator\Data\RequestBody;
+use NicoAndra\OpenApiGenerator\Data\Response;
+use NicoAndra\OpenApiGenerator\Test\Controller;
 
 it('can create operation without parameters', function () {
     foreach (['basic', 'array', 'collection', 'requestBasic', 'requestNoData', 'contentType'] as $function) {

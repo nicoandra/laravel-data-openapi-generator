@@ -38,7 +38,7 @@
 |
 */
 
-use Xolvio\OpenApiGenerator\Test\Controller;
+use NicoAndra\OpenApiGenerator\Test\Controller;
 
 function methodFromRoute(Illuminate\Routing\Route $route): ReflectionMethod|ReflectionFunction
 {

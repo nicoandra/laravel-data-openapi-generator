@@ -5,14 +5,14 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Xolvio\\OpenApiGenerator\\": "src/",
-            "Xolvio\\OpenApiGenerator\\Test\\": "tests/Dummy/"
+            "NicoAndra\\OpenApiGenerator\\": "src/",
+            "NicoAndra\\OpenApiGenerator\\Test\\": "tests/Dummy/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Xolvio\\OpenApiGenerator\\OpenApiServiceProvider"
+                "NicoAndra\\OpenApiGenerator\\OpenApiServiceProvider"
             ]
         }
     },
@@ -20,9 +20,13 @@
         {
             "name": "Robert Groot",
             "email": "r.groot@xolvio.nl"
+        },
+        {
+            "name": "Nicolas Andrade",
+            "email": "nico@nmac.com.ar"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
         "format": [
@@ -40,7 +44,7 @@
     },
     "require": {
         "spatie/laravel-data": "^4",
-        "laravel/framework": "^8|^9|^10|^11|^12",
+        "laravel/framework": "^8|^9|^10|^11",
         "phpdocumentor/reflection-docblock": "^5.4",
         "spatie/invade": "^2"
     },

@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Routing\Route;
-use Xolvio\OpenApiGenerator\Data\OpenApi;
-use Xolvio\OpenApiGenerator\Data\Response;
-use Xolvio\OpenApiGenerator\Test\Controller;
+use NicoAndra\OpenApiGenerator\Data\OpenApi;
+use NicoAndra\OpenApiGenerator\Data\Response;
+use NicoAndra\OpenApiGenerator\Test\Controller;
 
 it('can create data response', function () {
     foreach (['basic', 'intParameter', 'stringParameter', 'modelParameter', 'requestBasic', 'allCombined'] as $function) {

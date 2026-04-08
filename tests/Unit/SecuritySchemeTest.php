@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Routing\Route;
-use Xolvio\OpenApiGenerator\Data\SecurityScheme;
-use Xolvio\OpenApiGenerator\Test\Controller;
+use NicoAndra\OpenApiGenerator\Data\SecurityScheme;
+use NicoAndra\OpenApiGenerator\Test\Controller;
 
 it('can create no security scheme', function () {
     $route = new Route('get', '/', [Controller::class, 'basic']);

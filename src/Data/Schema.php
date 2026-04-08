@@ -1,6 +1,6 @@
 <?php
 
-namespace Xolvio\OpenApiGenerator\Data;
+namespace NicoAndra\OpenApiGenerator\Data;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -25,8 +25,8 @@ use Spatie\LaravelData\Support\Factories\DataPropertyFactory;
 use Spatie\LaravelData\Support\Transformation\TransformationContext;
 use Spatie\LaravelData\Support\Transformation\TransformationContextFactory;
 use UnitEnum;
-use Xolvio\OpenApiGenerator\Attributes\CustomContentType;
-use Xolvio\OpenApiGenerator\Attributes\HttpResponseStatus;
+use NicoAndra\OpenApiGenerator\Attributes\CustomContentType;
+use NicoAndra\OpenApiGenerator\Attributes\HttpResponseStatus;
 
 class Schema extends Data
 {

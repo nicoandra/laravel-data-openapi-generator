@@ -1,6 +1,6 @@
 <?php
 
-namespace Xolvio\OpenApiGenerator\Data;
+namespace NicoAndra\OpenApiGenerator\Data;
 
 use Illuminate\Support\Collection;
 use ReflectionClass;
@@ -12,7 +12,7 @@ use ReflectionUnionType;
 use RuntimeException;
 use Spatie\LaravelData\Data;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use Xolvio\OpenApiGenerator\Attributes\HttpResponseStatus;
+use NicoAndra\OpenApiGenerator\Attributes\HttpResponseStatus;
 
 class Response extends Data
 {

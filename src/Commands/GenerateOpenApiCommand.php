@@ -1,12 +1,12 @@
 <?php
 
-namespace Xolvio\OpenApiGenerator\Commands;
+namespace NicoAndra\OpenApiGenerator\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route as FacadeRoute;
-use Xolvio\OpenApiGenerator\Data\OpenApi;
+use NicoAndra\OpenApiGenerator\Data\OpenApi;
 
 class GenerateOpenApiCommand extends Command
 {
