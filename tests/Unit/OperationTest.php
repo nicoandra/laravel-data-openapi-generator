@@ -175,7 +175,10 @@ it('can create operation with route parameters', function () {
 
     $operation = Operation::fromRoute($route, $method);
 
-    expect($operation->parameters)
-        ->toBeNull('');
+    expect($operation->parameters)->toHaveLength(1);
+    $parameter = $operation->parameters->first();
+    expect($parameter->name)->toBe('routeParameter');
+    expect($parameter->in)->toBe('path');
+    expect($parameter->required)->toBeTrue();
 
 });

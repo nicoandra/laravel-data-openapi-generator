@@ -11,6 +11,11 @@ use ReflectionMethod;
 use ReflectionParameter;
 use Spatie\LaravelData\Data;
 
+use ReflectionClass;
+
+use ReflectionNamedType;
+use ReflectionType;
+
 class Parameter extends Data
 {
     public function __construct(
@@ -72,16 +77,37 @@ class Parameter extends Data
             );
         }
 
-        if (! $parameter) {
-            throw new Exception("Parameter {$name} not found in method {$method->getName()}");
+
+        foreach ($method->getParameters() as $parameter) {
+            $parameterType = $parameter->getType();
+
+            if (
+                !$parameterType ||
+                !is_a($parameterType->getName(), Data::class, true)
+            ) continue;
+
+            $dataClassProperties = Property::fromDataClass($parameterType->getName());
+
+            /** @var null|Property */
+            $property = Arr::first(
+                $dataClassProperties,
+                fn (Property $property) => $property->getName() === $name,
+            );
+
+            if ($property) {
+                return new self(
+                    name: $property->getName(),
+                    in: 'path',
+                    description: $property->getName(),
+                    required: $property->required,
+                    schema: $property->type,
+                );
+            }
         }
-    }
 
-
-    public static function fromRequestParameter(ReflectionParameter $parameter): self
-    {
-        // If the parameter is an instance of Laravel-Data, we should identify the property of that data class
+        throw new Exception("Parameter {$name} not found in method {$method->getName()}, neither as a property of the associated request class");
         
-
     }
+
+
 }
