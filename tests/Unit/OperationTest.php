@@ -175,7 +175,6 @@ it('can create operation with route parameters', function () {
 
     $operation = Operation::fromRoute($route, $method);
 
-    fwrite(STDERR, print_r($operation->parameters, TRUE));
     expect($operation->parameters)
         ->toBeNull('');
 
