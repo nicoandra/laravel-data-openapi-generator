@@ -53,7 +53,7 @@ it('can create data request body', function () {
             ]);
 
         expect(OpenApi::getTempSchemas())->toMatchArray(
-            ['RequestData' => 'Xolvio\\OpenApiGenerator\\Test\\RequestData']
+            ['RequestData' => 'NicoAndra\\OpenApiGenerator\\Test\\RequestData']
         );
     }
 });

@@ -26,7 +26,7 @@ it('can create data response', function () {
     }
 
     expect(OpenApi::getTempSchemas())->toMatchArray(
-        ['ReturnData' => 'Xolvio\\OpenApiGenerator\\Test\\ReturnData']
+        ['ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
     );
 });
 
@@ -52,7 +52,7 @@ it('can create collection response', function () {
     }
 
     expect(OpenApi::getTempSchemas())->toMatchArray(
-        ['ReturnData' => 'Xolvio\\OpenApiGenerator\\Test\\ReturnData']
+        ['ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
     );
 });
 
