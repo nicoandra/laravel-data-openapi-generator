@@ -161,7 +161,7 @@ return [
         Illuminate\Routing\RoutingServiceProvider::class,
 
         // Package Service Providers...
-        \Xolvio\OpenApiGenerator\OpenApiServiceProvider::class,
+        \NicoAndra\OpenApiGenerator\OpenApiServiceProvider::class,
         \Spatie\LaravelData\LaravelDataServiceProvider::class,
     ],
 

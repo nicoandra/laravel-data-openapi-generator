@@ -15,7 +15,7 @@ class Controller extends LaravelController
     }
 
     /**
-     * @return \Xolvio\OpenApiGenerator\Test\ReturnData[]
+     * @return \NicoAndra\OpenApiGenerator\Test\ReturnData[]
      */
     public function array(): array
     {
@@ -36,7 +36,7 @@ class Controller extends LaravelController
     }
 
     /**
-     * @return DataCollection<int,\Xolvio\OpenApiGenerator\Test\ReturnData>
+     * @return DataCollection<int,\NicoAndra\OpenApiGenerator\Test\ReturnData>
      */
     public function collection(): DataCollection
     {

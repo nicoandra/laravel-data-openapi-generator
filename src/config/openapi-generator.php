@@ -82,7 +82,7 @@ return [
     ],
 
     'security_middlewares' => [
-        \Xolvio\OpenApiGenerator\Data\SecurityScheme::BEARER_SECURITY_SCHEME => ['auth:sanctum'],
+        \NicoAndra\OpenApiGenerator\Data\SecurityScheme::BEARER_SECURITY_SCHEME => ['auth:sanctum'],
     ],
 
     /*
@@ -93,5 +93,5 @@ return [
     | Data class used to create the error scheme.
     |
     */
-    'error_scheme_class' => \Xolvio\OpenApiGenerator\Data\Error::class,
+    'error_scheme_class' => \NicoAndra\OpenApiGenerator\Data\Error::class,
 ];
