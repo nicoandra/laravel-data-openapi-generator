@@ -11,11 +11,6 @@ use ReflectionMethod;
 use ReflectionParameter;
 use Spatie\LaravelData\Data;
 
-use ReflectionClass;
-
-use ReflectionNamedType;
-use ReflectionType;
-
 class Parameter extends Data
 {
     public function __construct(
@@ -91,7 +86,7 @@ class Parameter extends Data
             /** @var null|Property */
             $property = Arr::first(
                 $dataClassProperties,
-                fn (Property $property) => $property->getName() === $name,
+                fn (Property $property) => $property->getName() === $name && $property->isFromRouteParameter,
             );
 
             if ($property) {
@@ -105,7 +100,7 @@ class Parameter extends Data
             }
         }
 
-        throw new Exception("Parameter {$name} not found in method {$method->getName()}, neither as a property of the associated request class");
+        throw new Exception("Parameter {$name} not found in method {$method->getName()}, neither as a property of the associated request class tagged with FromRouteParameter, nor as a parameter of the method itself.");
         
     }
 

@@ -13,6 +13,8 @@ beforeAll(function () {
     Route::prefix('api')->group(function () {
         Route::post('/{parameter_1}/{parameter_2}/{parameter_3}', [Controller::class, 'allCombined'])
             ->name('allCombined');
+        Route::post('/withRouteParameter/{routeParameter}/nic', [Controller::class, 'routeWithRouteParameter'])
+            ->name('routeWithRouteParameter');
         Route::post('/contentType', [Controller::class, 'contentType'])
             ->name('contentType');
         Route::get('/auth', [Controller::class, 'basic'])
