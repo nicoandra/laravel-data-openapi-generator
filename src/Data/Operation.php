@@ -14,11 +14,12 @@ use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Support\Transformation\TransformationContext;
 use Spatie\LaravelData\Support\Transformation\TransformationContextFactory;
 use NicoAndra\OpenApiGenerator\Attributes\Tags;
+use Illuminate\Support\Facades\Log as Logger;
 
 class Operation extends Data
 {
     public function __construct(
-        public ?string $description,
+        public string $description,
         public ?RequestBody $requestBody,
         /** @var ?Collection<int,Parameter> */
         public ?Collection $parameters,
@@ -37,8 +38,8 @@ class Operation extends Data
         if (is_string($uses)) {
             $controller_class = new ReflectionClass($route->getController());
             $controller_function = $controller_class->getMethod($route->getActionMethod());
+            Logger::info("Creating operation for route {$route->uri()} using controller {$controller_class->name} and method {$controller_function->name}");
 
-            echo $controller_class->name, "::", $controller_function->name, "\n";
         } elseif ($uses instanceof Closure) {
             $controller_class = null;
             $controller_function = new ReflectionFunction($uses);
@@ -46,6 +47,10 @@ class Operation extends Data
             throw new Exception('Unknown route uses');
         }
 
+
+        $docComment = $controller_function->getDocComment();
+        $descriptionObject = Description::fromDocComment($docComment);
+        $descriptionLines = [$descriptionObject->asString()];
         $responses = Response::fromRoute($controller_function)->all();
 
         $security = SecurityScheme::fromRoute($route);
@@ -53,12 +58,11 @@ class Operation extends Data
             $responses[HttpResponse::HTTP_UNAUTHORIZED] = Response::unauthorized($controller_function);
         }
 
-        $description = null;
         $permissions = SecurityScheme::getPermissions($route);
         if (count($permissions) > 0) {
             $permissions_string = implode(', ', $permissions);
 
-            $description = "Permissions needed: {$permissions_string}";
+            $descriptionLines[] = "Permissions needed: {$permissions_string}";
 
             $responses[HttpResponse::HTTP_FORBIDDEN] = Response::forbidden($controller_function);
         }
@@ -70,6 +74,8 @@ class Operation extends Data
             $params      = collect([...$params->all(), ...$bodyParams]);
             $requestBody = null;
         }
+
+        $description = implode("\n", $descriptionLines);
 
         return self::from([
             'description' => $description,

@@ -43,6 +43,21 @@ it('can create operation with multiple parameters', function () {
     expect($operation->parameters)
         ->toHaveLength(3);
 });
+
+it('can create operation with description', function () {
+    $method = 'post';
+    $route  = new Route($method, '/{parameter_1}/{parameter_2}/{parameter_3}', [Controller::class, 'allCombined']);
+    $route->setContainer(app());
+
+    $operation = Operation::fromRoute($route, $method);
+
+    expect($operation->description)
+        ->toContain('Summary of allCombined');
+    
+    expect($operation->parameters)
+        ->toHaveLength(3);
+});
+
 it('can create operation without request body', function () {
     foreach (['basic', 'array', 'collection', 'intParameter', 'stringParameter', 'modelParameter', 'requestNoData'] as $function) {
         $method = 'post';

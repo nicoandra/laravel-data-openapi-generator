@@ -12,14 +12,14 @@ In `composer.json` add this repository:
     "repositories": [
         {
             "type": "github",
-            "url": "https://github.com/xolvionl/laravel-data-openapi-generator"
+            "url": "https://github.com/nicoandra/laravel-data-openapi-generator"
         }
     ],
 ```
 
 ## Install
 
-`composer require xolvio/laravel-data-openapi-generator`
+`composer require nicoandra/laravel-data-openapi-generator`
 
 # Optional
 
@@ -80,3 +80,10 @@ const url = `${import.meta.env.VITE_APP_URL}/api/openapi`;
 ## View
 
 Swagger available at `APP_URL/api/openapi`
+
+
+
+# Development
+
+1. Run `make install` to install all dependencies
+2. Run `make test` to run tests

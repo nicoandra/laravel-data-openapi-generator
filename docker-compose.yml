@@ -4,6 +4,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+      target: dev
     user: "${UID:-1000}"
     command: php-fpm -F
     hostname: laravel-data-openapi-generator
