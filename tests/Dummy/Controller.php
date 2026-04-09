@@ -4,7 +4,8 @@ namespace NicoAndra\OpenApiGenerator\Test;
 
 use Illuminate\Routing\Controller as LaravelController;
 use Spatie\LaravelData\DataCollection;
-
+use NicoAndra\OpenApiGenerator\Attributes\Description;
+use NicoAndra\OpenApiGenerator\Attributes\Summary;
 class Controller extends LaravelController
 {
     public function noResponse() {}
@@ -61,7 +62,8 @@ class Controller extends LaravelController
         return ReturnData::create($parameter);
     }
 
-    public function stringParameter(string $parameter): ReturnData
+    #[Description('This is the method description')]
+    public function stringParameter(string $parameter): ReturnData|ReturnDataWithStatusAttribute
     {
         return ReturnData::create($parameter);
     }
@@ -71,6 +73,7 @@ class Controller extends LaravelController
         return ReturnData::create($parameter);
     }
 
+    #[Summary('This is a summary')]
     public function requestBasic(RequestData $request): ReturnData
     {
         return ReturnData::create($request);

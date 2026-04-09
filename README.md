@@ -21,6 +21,29 @@ In `composer.json` add this repository:
 
 `composer require nicoandra/laravel-data-openapi-generator`
 
+
+
+
+## Usage
+
+1. Make your application to expect and return `Data` classes as requests and responses.
+2. Use the attributes `Summary` and `Description` to provide human descriptions to your routes:
+
+```
+#[Description('This describes the route')]
+#[Description('Summary')]
+class MyRequest extends Data {
+    [...]
+}
+
+class MyResponse extends Data {
+    [...]
+}
+
+```
+
+
+
 # Optional
 
 ## Version

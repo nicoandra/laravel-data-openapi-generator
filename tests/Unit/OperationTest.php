@@ -82,6 +82,48 @@ it('can create operation with request body', function () {
             ->toBeInstanceOf(RequestBody::class);
     }
 });
+
+it('includes summary in request', function () {
+    foreach (['requestBasic'] as $function) {
+        $method = 'post';
+        $route  = new Route($method, '/', [Controller::class, $function]);
+        $route->setContainer(app());
+
+        $operation = Operation::fromRoute($route, $method);
+
+        expect($operation->summary)
+            ->toBe('This is a summary');
+        
+
+        expect($operation->requestBody)
+            ->toBeInstanceOf(RequestBody::class);
+    }
+});
+
+
+it('includes description in request', function () {
+    foreach (['stringParameter'] as $function) {
+        $method = 'post';
+        $route  = new Route($method, '/', [Controller::class, $function]);
+        $route->setContainer(app());
+
+        $operation = Operation::fromRoute($route, $method);
+
+        expect($operation->description)
+            ->toBe('This is the method description');
+
+        expect($operation->responses)
+            ->toHaveLength(2);
+
+        expect($operation->responses[200]->description)
+            ->toBe('This is the response description');
+
+        expect($operation->responses[420]->description)
+            ->toBe('Jamaica no problem');            
+    }
+});
+
+
 it('can create operation with response', function () {
     foreach (['basic', 'array', 'collection', 'intParameter', 'stringParameter', 'modelParameter', 'requestNoData', 'requestBasic', 'allCombined', 'contentType'] as $function) {
         $method = 'post';

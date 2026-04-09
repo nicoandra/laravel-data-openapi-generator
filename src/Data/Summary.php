@@ -1,10 +1,11 @@
 <?php
+
 namespace NicoAndra\OpenApiGenerator\Data;
 
 use Spatie\LaravelData\Data;
 
-class Description extends Data {
-  
+class Summary extends Data {
+
     use Trait\AttributeValueFromReflection;
     public function __construct(
         public string $value
@@ -14,4 +15,5 @@ class Description extends Data {
     {
         return $this->value;
     }
+
 }

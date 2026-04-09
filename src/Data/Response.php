@@ -12,7 +12,7 @@ use ReflectionUnionType;
 use RuntimeException;
 use Spatie\LaravelData\Data;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use NicoAndra\OpenApiGenerator\Attributes\HttpResponseStatus;
+use NicoAndra\OpenApiGenerator\Attributes;
 
 class Response extends Data
 {
@@ -32,9 +32,13 @@ class Response extends Data
                 throw new RuntimeException('Unsupported return type: ' . $type->getName());
             }
 
+            $description = Description::fromReflectionAndAttribute(
+                new ReflectionClass($type->getName()),
+                Attributes\Description::class
+            );
             return [
                 self::statusCodeFromType($type) => new self(
-                    description: $method->getName(),
+                    description: $description,
                     content: Content::fromReflection($type, $method),
                 ),
             ];
@@ -48,7 +52,7 @@ class Response extends Data
         }
 
         $class      = new ReflectionClass($type->getName());
-        $attributes = $class->getAttributes(HttpResponseStatus::class);
+        $attributes = $class->getAttributes(Attributes\HttpResponseStatus::class);
 
         return count($attributes) > 0 ? $attributes[0]->getArguments()[0] : HttpResponse::HTTP_OK;
     }

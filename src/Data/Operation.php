@@ -15,12 +15,14 @@ use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Support\Transformation\TransformationContext;
 use Spatie\LaravelData\Support\Transformation\TransformationContextFactory;
 use NicoAndra\OpenApiGenerator\Attributes\Tags;
+use NicoAndra\OpenApiGenerator\Attributes;
 use Illuminate\Support\Facades\Log as Logger;
 
 class Operation extends Data
 {
     public function __construct(
         public string $description,
+        public string $summary,
         public ?RequestBody $requestBody,
         /** @var ?Collection<int,Parameter> */
         public ?Collection $parameters,
@@ -47,10 +49,9 @@ class Operation extends Data
         } else {
             throw new Exception('Unknown route uses');
         }
-
-        $docComment = $controller_function->getDocComment();
-        $descriptionObject = Description::fromDocComment($docComment);
-        $descriptionLines = [$descriptionObject->asString()];
+    
+        $descriptionLines[] = (string) Description::fromReflectionAndAttribute($controller_function, Attributes\Description::class);
+        
         $responses = Response::fromRoute($controller_function)->all();
 
         $security = SecurityScheme::fromRoute($route);
@@ -77,8 +78,11 @@ class Operation extends Data
 
         $description = collect($descriptionLines)->map(fn($x) => trim($x))->filter(fn($x) => strlen($x) > 0)->join("\n");
 
+        $summary = (string) Summary::fromReflectionAndAttribute($controller_function, Attributes\Summary::class);
+
         return self::from([
             'description' => $description,
+            'summary'     => $summary,
             'parameters'  => $params->count() > 0 ? $params : null,
             'requestBody' => $requestBody,
             'responses'   => $responses,

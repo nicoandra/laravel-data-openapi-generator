@@ -1,11 +1,12 @@
 <?php
 
 namespace NicoAndra\OpenApiGenerator\Test;
-use NicoAndra\OpenApiGenerator\Attributes\HttpResponseStatus;
+use NicoAndra\OpenApiGenerator\Attributes;
 
 use Spatie\LaravelData\Data;
 
-#[HttpResponseStatus(420)]
+#[Attributes\HttpResponseStatus(420)]
+#[Attributes\Description('Jamaica no problem')]
 class ReturnDataWithStatusAttribute extends Data
 {
     public function __construct(

@@ -4,6 +4,8 @@ namespace NicoAndra\OpenApiGenerator\Test;
 
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Data;
+use NicoAndra\OpenApiGenerator\Attributes;
+
 
 class RequestDataWithRouteParameter extends Data
 {
