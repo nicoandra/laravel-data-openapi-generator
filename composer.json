@@ -53,9 +53,9 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.59",
-        "nunomaduro/larastan": "^2.9",
         "orchestra/testbench": "^9",
-        "pestphp/pest": "^v2.34"
+        "pestphp/pest": "^v2.34",
+        "larastan/larastan": "^3.9"
     },
     "config": {
         "allow-plugins": {
