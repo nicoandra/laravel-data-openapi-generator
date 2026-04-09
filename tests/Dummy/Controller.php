@@ -99,4 +99,10 @@ class Controller extends LaravelController
     {
         return ReturnData::from(['message' => $requestData->routeParameter]);
     }
+
+
+    public function routeWithStatusAttribute(RequestDataWithRouteParameter $requestData): ReturnDataWithStatusAttribute
+    {
+        return ReturnDataWithStatusAttribute::create();
+    }
 }

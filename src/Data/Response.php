@@ -50,7 +50,7 @@ class Response extends Data
         $class      = new ReflectionClass($type->getName());
         $attributes = $class->getAttributes(HttpResponseStatus::class);
 
-        return count($attributes) > 0 ? $attributes[0]->getArguments()['status'] : HttpResponse::HTTP_OK;
+        return count($attributes) > 0 ? $attributes[0]->getArguments()[0] : HttpResponse::HTTP_OK;
     }
 
     public static function unauthorized(ReflectionMethod|ReflectionFunction $method): self

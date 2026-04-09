@@ -41,6 +41,9 @@
         "test": [
             "vendor/bin/pest"
         ],
+        "test-coverage": [
+            "vendor/bin/pest --coverage --coverage-html=coverage"
+        ],
         "test-docker": [
             "docker-compose run --rm php vendor/bin/pest"
         ]        

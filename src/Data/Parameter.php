@@ -36,9 +36,9 @@ class Parameter extends Data
     }
 
     /**
-     * @return ?Collection<int,static>
+     * @return Collection<int,static>
      */
-    public static function fromRequestBody(RequestBody $requestBody): ?Collection
+    public static function fromRequestBody(RequestBody $requestBody): Collection
     {
         /*
          * GET requests cannot have request bodies
@@ -51,7 +51,7 @@ class Parameter extends Data
             required: $property->required,
             schema: $property->type,
             in: 'query',
-        ));
+        )) ?? collect([]);
     }
 
     public static function fromParameter(string $name, ReflectionFunction|ReflectionMethod $method): self

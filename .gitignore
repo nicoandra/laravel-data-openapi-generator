@@ -2,3 +2,4 @@
 .php-cs.cache
 .phpunit.result.cache
 .phpunit.cache
+coverage/

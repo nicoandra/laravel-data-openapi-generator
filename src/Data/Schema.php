@@ -26,7 +26,6 @@ use Spatie\LaravelData\Support\Transformation\TransformationContext;
 use Spatie\LaravelData\Support\Transformation\TransformationContextFactory;
 use UnitEnum;
 use NicoAndra\OpenApiGenerator\Attributes\CustomContentType;
-use NicoAndra\OpenApiGenerator\Attributes\HttpResponseStatus;
 
 class Schema extends Data
 {

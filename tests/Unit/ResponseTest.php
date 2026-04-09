@@ -30,6 +30,34 @@ it('can create data response', function () {
     );
 });
 
+
+it('understands status response attribute', function () {
+    foreach (['routeWithStatusAttribute'] as $function) {
+        $route  = new Route('get', '/', [Controller::class, $function]);
+        $method = methodFromRoute($route);
+
+        expect(Response::fromRoute($method)->toArray())
+            ->toBe([
+                420 => [
+                    'description' => $function,
+                    'content'     => [
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' => '#/components/schemas/ReturnDataWithStatusAttribute',
+                            ],
+                        ],
+                    ],
+                ],
+            ]);
+    }
+
+    expect(OpenApi::getTempSchemas())->toMatchArray(
+        ['ReturnDataWithStatusAttribute' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnDataWithStatusAttribute']
+    );
+});
+
+
+
 it('can create collection response', function () {
     foreach (['array', 'collection'] as $function) {
         $route  = new Route('get', '/', [Controller::class, $function]);
@@ -55,6 +83,9 @@ it('can create collection response', function () {
         ['ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
     );
 });
+
+
+
 
 it('cannot create incomplete collection response', function () {
     foreach (['arrayIncompletePath', 'arrayFail', 'collectionIncompletePath', 'collectionFail'] as $function) {

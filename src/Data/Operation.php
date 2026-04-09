@@ -5,6 +5,7 @@ namespace NicoAndra\OpenApiGenerator\Data;
 use Closure;
 use Exception;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use ReflectionClass;
@@ -46,7 +47,6 @@ class Operation extends Data
         } else {
             throw new Exception('Unknown route uses');
         }
-
 
         $docComment = $controller_function->getDocComment();
         $descriptionObject = Description::fromDocComment($docComment);

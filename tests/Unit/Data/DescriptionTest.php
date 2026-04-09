@@ -1,12 +1,6 @@
 <?php
 
-use Illuminate\Routing\Route;
-use Spatie\LaravelData\Data;
-use NicoAndra\OpenApiGenerator\Data\Content;
-use NicoAndra\OpenApiGenerator\Data\RequestBody;
-
 use NicoAndra\OpenApiGenerator\Data\Description;
-
 
 it('creates descriptions from docblock syntax', function () {
     $docComment = <<<EOT

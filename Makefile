@@ -5,6 +5,9 @@ install:
 test:
 	docker-compose run --build --rm -v $(PWD):/var/www/html openapi-generator composer run test
 
+test-coverage:
+	docker-compose run --rm -v $(PWD):/var/www/html openapi-generator composer run test-coverage
+
 
 dev:
 	docker-compose up --build openapi-generator
