@@ -17,7 +17,7 @@ it('can create data response', function () {
                     'content'     => [
                         'application/json' => [
                             'schema' => [
-                                '$ref' => '#/components/schemas/ReturnData',
+                                '$ref' => '#/components/schemas/PublicName.SubPackage.ReturnData',
                             ],
                         ],
                     ],
@@ -26,7 +26,7 @@ it('can create data response', function () {
     }
 
     expect(OpenApi::getTempSchemas())->toMatchArray(
-        ['ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
+        ['PublicName.SubPackage.ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
     );
 });
 
@@ -44,7 +44,7 @@ it('can create data response with multiple response return types', function () {
                     'content'     => [
                         'application/json' => [
                             'schema' => [
-                                '$ref' => '#/components/schemas/ReturnData',
+                                '$ref' => '#/components/schemas/PublicName.SubPackage.ReturnData',
                             ],
                         ],
                     ],
@@ -54,7 +54,7 @@ it('can create data response with multiple response return types', function () {
                     'content' =>  [
                         'application/json' => [
                             'schema' => [
-                                '$ref' => '#/components/schemas/ReturnDataWithStatusAttribute',
+                                '$ref' => '#/components/schemas/PublicName.SubPackage.ReturnDataWithStatusAttribute',
                             ],
                         ],
                     ],
@@ -63,7 +63,7 @@ it('can create data response with multiple response return types', function () {
     }
 
     expect(OpenApi::getTempSchemas())->toMatchArray(
-        ['ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
+        ['PublicName.SubPackage.ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
     );
 });
 
@@ -80,7 +80,7 @@ it('understands status response attribute', function () {
                     'content'     => [
                         'application/json' => [
                             'schema' => [
-                                '$ref' => '#/components/schemas/ReturnDataWithStatusAttribute',
+                                '$ref' => '#/components/schemas/PublicName.SubPackage.ReturnDataWithStatusAttribute',
                             ],
                         ],
                     ],
@@ -89,7 +89,7 @@ it('understands status response attribute', function () {
     }
 
     expect(OpenApi::getTempSchemas())->toMatchArray(
-        ['ReturnDataWithStatusAttribute' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnDataWithStatusAttribute']
+        ['PublicName.SubPackage.ReturnDataWithStatusAttribute' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnDataWithStatusAttribute']
     );
 });
 
@@ -106,7 +106,7 @@ it('can create collection response', function () {
                         'schema' => [
                             'type'  => 'array',
                             'items' => [
-                                '$ref' => '#/components/schemas/ReturnData',
+                                '$ref' => '#/components/schemas/PublicName.SubPackage.ReturnData',
                             ],
                         ],
                     ],
@@ -115,7 +115,7 @@ it('can create collection response', function () {
     }
 
     expect(OpenApi::getTempSchemas())->toMatchArray(
-        ['ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
+        ['PublicName.SubPackage.ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
     );
 });
 

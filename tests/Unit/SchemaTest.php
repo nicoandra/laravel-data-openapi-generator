@@ -27,7 +27,7 @@ it('can create array schema', function () {
             ->toBe([
                 'type'  => 'array',
                 'items' => [
-                    '$ref' => '#/components/schemas/ReturnData',
+                    '$ref' => '#/components/schemas/PublicName.SubPackage.ReturnData',
                 ],
             ]);
     }
@@ -53,11 +53,11 @@ it('can create ref data schema', function () {
     foreach ([RequestData::class, ReturnData::class, ContentTypeData::class] as $class) {
         expect(Schema::fromDataReflection($class)->toArray())
             ->toBe([
-                '$ref' => '#/components/schemas/' . class_basename($class),
+                '$ref' => '#/components/schemas/PublicName.SubPackage.' . class_basename($class),
             ]);
 
         expect(OpenApi::getTempSchemas())->toMatchArray(
-            [class_basename($class) => $class]
+            ['PublicName.SubPackage.' . class_basename($class) => $class]
         );
     }
 });

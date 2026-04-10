@@ -62,16 +62,16 @@ it('can create properties from data class', function () {
             [
                 'nullable' => true,
                 'allOf'    => [
-                    ['$ref' => '#/components/schemas/RequestData'],
+                    ['$ref' => '#/components/schemas/PublicName.SubPackage.RequestData'],
                 ],
             ],
             [
-                '$ref' => '#/components/schemas/ReturnData',
+                '$ref' => '#/components/schemas/PublicName.SubPackage.ReturnData',
             ],
             [
                 'nullable' => true,
                 'allOf'    => [
-                    ['$ref' => '#/components/schemas/ReturnData'],
+                    ['$ref' => '#/components/schemas/PublicName.SubPackage.ReturnData'],
                 ],
             ],
             [

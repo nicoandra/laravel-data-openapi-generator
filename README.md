@@ -3,14 +3,15 @@
 Generate OpenAPI specification from Laravel routes and Laravel Data objects.
 
 Additional features:
-* Leverage `Summary` and `Description` annotations to add extra documentation to your OpenAPI Spec.
+* Leverage `Summary` and `Description` and `Example` annotations to add extra documentation to your OpenAPI Spec.
 * Allows using route parameters, interpreting the `FromRouteParameter` annotation used by [Laravel-Data](https://spatie.be/docs/laravel-data/v4/as-a-data-transfer-object/injecting-property-values#content-using-scalar-route-parameters)
+* Schema names include the namespace of the class, so schema names don't collide.
+* Class namespaces can be aliased, hiding your internal structure from the resulting document. See the `namespace_aliases` configuration entry.
 
 
 ## Install
 
 `composer require nicoandra/laravel-data-openapi-generator`
-
 
 ## Usage
 

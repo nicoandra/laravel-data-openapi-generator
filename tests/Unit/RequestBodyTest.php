@@ -45,7 +45,7 @@ it('can create data request body', function () {
                 'content' => [
                     'application/json' => [
                         'schema' => [
-                            '$ref' => '#/components/schemas/RequestData',
+                            '$ref' => '#/components/schemas/PublicName.SubPackage.RequestData',
                         ],
                     ],
                 ],
@@ -53,7 +53,7 @@ it('can create data request body', function () {
             ]);
 
         expect(OpenApi::getTempSchemas())->toMatchArray(
-            ['RequestData' => 'NicoAndra\\OpenApiGenerator\\Test\\RequestData']
+            ['PublicName.SubPackage.RequestData' => 'NicoAndra\\OpenApiGenerator\\Test\\RequestData']
         );
     }
 });

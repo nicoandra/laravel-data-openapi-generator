@@ -87,6 +87,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Namespace aliases
+    |--------------------------------------------------------------------------
+    | The namespace sections that should be aliased when generating the OpenAPI file.
+    | This is used to shorten the namespace of the generated schemas. 
+    | Also used to avoid disclosing internal namespaces in the generated OpenAPI file.
+    | The key is the namespace section to be replaced, and the value is the alias to replace it with.
+    | When replacing, the application will ensure the alias and the replacement end with \ (backslash)
+    | to avoid partial replacements
+    |
+    */
+    'namespace_aliases' => [
+        // 'App\MySecretCodeNamePackageName\Requests' => 'PublicName\Requests'
+        'NicoAndra\\OpenApiGenerator\\Test' => 'PublicName\\SubPackage',
+    ],
+    /*
+    |--------------------------------------------------------------------------
     | Error scheme class
     |--------------------------------------------------------------------------
     |

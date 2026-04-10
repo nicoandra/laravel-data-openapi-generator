@@ -14,7 +14,7 @@ it('can create default content', function () {
             ->toBe([
                 'application/json' => [
                     'schema' => [
-                        '$ref' => '#/components/schemas/RequestData',
+                        '$ref' => '#/components/schemas/PublicName.SubPackage.RequestData',
                     ],
                 ],
             ]);
@@ -29,12 +29,12 @@ it('can create custom content', function () {
         ->toBe([
             'application/json' => [
                 'schema' => [
-                    '$ref' => '#/components/schemas/ContentTypeData',
+                    '$ref' => '#/components/schemas/PublicName.SubPackage.ContentTypeData',
                 ],
             ],
             'application/xml' => [
                 'schema' => [
-                    '$ref' => '#/components/schemas/ContentTypeData',
+                    '$ref' => '#/components/schemas/PublicName.SubPackage.ContentTypeData',
                 ],
             ],
         ]);

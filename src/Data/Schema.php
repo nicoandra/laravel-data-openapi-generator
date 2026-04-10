@@ -241,6 +241,8 @@ class Schema extends Data
 
         $scheme_name = last(explode('\\', $type_name));
 
+        $scheme_name = self::getClassAliasFromClassName($type_name);
+
         if (! $scheme_name || ! is_string($scheme_name)) {
             throw new RuntimeException("Cannot read basename from {$type_name}");
         }
@@ -313,5 +315,17 @@ class Schema extends Data
             items: self::fromDataReflection($class),
             nullable: $nullable,
         );
+    }
+
+    protected static function getClassAliasFromClassName(string $class_name): string
+    {
+        /* var $namespaces array<string,string> */
+        $namespaces = config('openapi-generator.namespace_aliases', []);
+
+        $result = $class_name;
+        foreach ($namespaces as $namespace => $alias) {
+            $result = str_replace($namespace . '\\', $alias . '\\', $result);
+        }
+        return str_replace('\\', '.', $result);        
     }
 }
