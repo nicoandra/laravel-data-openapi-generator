@@ -5,9 +5,9 @@ namespace NicoAndra\OpenApiGenerator\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route as FacadeRoute;
 use NicoAndra\OpenApiGenerator\Data\OpenApi;
-use Illuminate\Support\Facades\Log;
 
 class GenerateOpenApiCommand extends Command
 {
@@ -43,9 +43,9 @@ class GenerateOpenApiCommand extends Command
      */
     protected function getRoutes(): array
     {
-        $registeredRoutes = FacadeRoute::getRoutes()->getRoutes();
+        $registeredRoutes      = FacadeRoute::getRoutes()->getRoutes();
         $includedRoutePrefixes = config('openapi-generator.included_route_prefixes', []);
-        $ignoredRouteNames = config('openapi-generator.ignored_route_names', []);
+        $ignoredRouteNames     = config('openapi-generator.ignored_route_names', []);
 
         /** @var array<string,array<string,Route>> */
         $routes = [];
@@ -53,20 +53,22 @@ class GenerateOpenApiCommand extends Command
         /** @var array<int,Route> */
         $initial_routes = array_values(array_filter(
             $registeredRoutes,
-            function(Route $route) use ($includedRoutePrefixes, $ignoredRouteNames) {
-                $uri = $route->uri;
+            function (Route $route) use ($includedRoutePrefixes, $ignoredRouteNames) {
+                $uri  = $route->uri;
                 $name = $route->getName() ?? '';
-                if(!$this->strStartsWith($uri, $includedRoutePrefixes)) {
+                if (! $this->strStartsWith($uri, $includedRoutePrefixes)) {
                     Log::info("Skipping route {$name} {$uri}, it does not start with any of the included prefixes");
+
                     return false;
                 }
-                if($this->strStartsWith($name, $ignoredRouteNames)) {
+                if ($this->strStartsWith($name, $ignoredRouteNames)) {
                     Log::info("Skipping route {$name} {$uri}, its name starts with one of the ignored names");
+
                     return false;
                 }
+
                 return true;
             }
-
         ));
 
         foreach ($initial_routes as $route) {

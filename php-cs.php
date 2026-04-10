@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @see https://github.com/FriendsOfPHP/PHP-CS-Fixer
  */

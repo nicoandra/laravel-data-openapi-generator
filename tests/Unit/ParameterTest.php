@@ -26,7 +26,7 @@ it('can create int parameter', function () {
             'schema'      => [
                 'type' => 'integer',
             ],
-            'example'       => '',
+            'example' => '',
         ]]);
 });
 
@@ -43,7 +43,7 @@ it('can create string parameter', function () {
             'schema'      => [
                 'type' => 'string',
             ],
-            'example' => ''
+            'example' => '',
         ]]);
 });
 
@@ -60,7 +60,7 @@ it('can create model parameter', function () {
             'schema'      => [
                 'type' => 'integer',
             ],
-            'example' => ''
+            'example' => '',
         ]]);
 });
 it('can create multiple parameters', function () {
@@ -76,8 +76,7 @@ it('can create multiple parameters', function () {
             'schema'      => [
                 'type' => 'integer',
             ],
-            'example' => 'example value for parameter_1'
-
+            'example' => 'example value for parameter_1',
         ], [
             'name'        => 'parameter_2',
             'in'          => 'path',
@@ -86,8 +85,7 @@ it('can create multiple parameters', function () {
             'schema'      => [
                 'type' => 'string',
             ],
-            'example' => 'example value for parameter_2'
-
+            'example' => 'example value for parameter_2',
         ], [
             'name'        => 'parameter_3',
             'in'          => 'path',
@@ -96,6 +94,6 @@ it('can create multiple parameters', function () {
             'schema'      => [
                 'type' => 'integer',
             ],
-            'example' => 'example value for parameter_3'
+            'example' => 'example value for parameter_3',
         ]]);
 });

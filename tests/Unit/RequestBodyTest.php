@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Routing\Route;
-use Spatie\LaravelData\Data;
 use NicoAndra\OpenApiGenerator\Data\OpenApi;
 use NicoAndra\OpenApiGenerator\Data\RequestBody;
+use Spatie\LaravelData\Data;
 
 it('can detect no request body', function () {
     foreach (['basic', 'intParameter', 'stringParameter', 'modelParameter', 'requestNoData'] as $function) {

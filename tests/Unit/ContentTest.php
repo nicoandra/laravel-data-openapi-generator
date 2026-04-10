@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Routing\Route;
-use Spatie\LaravelData\Data;
 use NicoAndra\OpenApiGenerator\Data\Content;
 use NicoAndra\OpenApiGenerator\Data\RequestBody;
+use Spatie\LaravelData\Data;
 
 it('can create default content', function () {
     foreach (['requestBasic', 'allCombined'] as $function) {

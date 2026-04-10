@@ -1,13 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use NicoAndra\OpenApiGenerator\Test\Controller;
-use Illuminate\Support\Facades\Config;
 
 beforeAll(function () {
-    
     /*
     $random = rand(1000, 9999);
     $directory = dirname(config('openapi-generator.path')) . DIRECTORY_SEPARATOR . $random;
@@ -36,16 +35,15 @@ beforeAll(function () {
             ->can('permission1')
             ->middleware('can:permission2')
             ->middleware('auth:sanctum')
-            ->name('authIgnored');            
+            ->name('authIgnored');
     });
 
     Route::prefix('excludedPrefix')->group(function () {
         Route::get('/authIgnored', [Controller::class, 'basic'])
             ->can('permission1')
             ->middleware('can:permission2')
-            ->middleware('auth:sanctum');  
+            ->middleware('auth:sanctum');
     });
-
 });
 
 it('can generate json', function () {
@@ -61,7 +59,6 @@ it('can generate json', function () {
     expect($parsed['paths'])->toHaveKey('/api/auth');
     expect($parsed['paths'])->not->toHaveKey('/api/authIgnored');
     expect($parsed['paths'])->not->toHaveKey('/excludedPrefix/authIgnored');
-
 });
 
 afterAll(function () {

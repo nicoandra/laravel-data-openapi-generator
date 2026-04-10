@@ -1,8 +1,8 @@
 <?php
 
 namespace NicoAndra\OpenApiGenerator\Test;
-use NicoAndra\OpenApiGenerator\Attributes;
 
+use NicoAndra\OpenApiGenerator\Attributes;
 use Spatie\LaravelData\Data;
 
 #[Attributes\HttpResponseStatus(420)]

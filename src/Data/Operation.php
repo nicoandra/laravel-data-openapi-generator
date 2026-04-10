@@ -5,18 +5,17 @@ namespace NicoAndra\OpenApiGenerator\Data;
 use Closure;
 use Exception;
 use Illuminate\Http\Response as HttpResponse;
-use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log as Logger;
+use NicoAndra\OpenApiGenerator\Attributes;
+use NicoAndra\OpenApiGenerator\Attributes\Tags;
 use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Support\Transformation\TransformationContext;
 use Spatie\LaravelData\Support\Transformation\TransformationContextFactory;
-use NicoAndra\OpenApiGenerator\Attributes\Tags;
-use NicoAndra\OpenApiGenerator\Attributes;
-use Illuminate\Support\Facades\Log as Logger;
 
 class Operation extends Data
 {
@@ -39,19 +38,18 @@ class Operation extends Data
         $uses = $route->action['uses'];
 
         if (is_string($uses)) {
-            $controller_class = new ReflectionClass($route->getController());
+            $controller_class    = new ReflectionClass($route->getController());
             $controller_function = $controller_class->getMethod($route->getActionMethod());
             Logger::info("Creating operation for route {$route->uri()} using controller {$controller_class->name} and method {$controller_function->name}");
-
         } elseif ($uses instanceof Closure) {
-            $controller_class = null;
+            $controller_class    = null;
             $controller_function = new ReflectionFunction($uses);
         } else {
             throw new Exception('Unknown route uses');
         }
-    
+
         $descriptionLines[] = (string) Description::fromReflectionAndAttribute($controller_function, Attributes\Description::class);
-        
+
         $responses = Response::fromRoute($controller_function)->all();
 
         $security = SecurityScheme::fromRoute($route);
@@ -76,7 +74,7 @@ class Operation extends Data
             $requestBody = null;
         }
 
-        $description = collect($descriptionLines)->map(fn($x) => trim($x))->filter(fn($x) => strlen($x) > 0)->join("\n");
+        $description = collect($descriptionLines)->map(fn ($x) => trim($x))->filter(fn ($x) => strlen($x) > 0)->join("\n");
 
         $summary = (string) Summary::fromReflectionAndAttribute($controller_function, Attributes\Summary::class);
 
@@ -92,27 +90,6 @@ class Operation extends Data
         ]);
     }
 
-    private static function tagsFromReflection(null|ReflectionClass|ReflectionMethod|ReflectionFunction ...$reflections): ?Collection
-    {
-        $tags = collect();
-        foreach ($reflections as $reflection) {
-            if (!$reflection) {
-                continue;
-            }
-            $attributes = $reflection->getAttributes(Tags::class);
-            foreach ($attributes as $attribute) {
-                /** @var Tags $instance */
-                $instance = $attribute->newInstance();
-                $tags = $tags->merge($instance->tags);
-            }
-        }
-
-        if ($tags->count() == 0) {
-            return null;
-        }
-        return $tags;
-    }
-
     /**
      * @return array<int|string,mixed>
      */
@@ -123,5 +100,27 @@ class Operation extends Data
             parent::transform($transformationContext),
             fn (mixed $value) => null !== $value,
         );
+    }
+
+    private static function tagsFromReflection(null|ReflectionClass|ReflectionMethod|ReflectionFunction ...$reflections): ?Collection
+    {
+        $tags = collect();
+        foreach ($reflections as $reflection) {
+            if (! $reflection) {
+                continue;
+            }
+            $attributes = $reflection->getAttributes(Tags::class);
+            foreach ($attributes as $attribute) {
+                /** @var Tags $instance */
+                $instance = $attribute->newInstance();
+                $tags     = $tags->merge($instance->tags);
+            }
+        }
+
+        if (0 == $tags->count()) {
+            return null;
+        }
+
+        return $tags;
     }
 }

@@ -2,11 +2,10 @@
 
 namespace NicoAndra\OpenApiGenerator\Test;
 
-use NicoAndra\OpenApiGenerator\Attributes\Example;
-use Spatie\LaravelData\Data;
 use NicoAndra\OpenApiGenerator\Attributes\Description;
+use NicoAndra\OpenApiGenerator\Attributes\Example;
 use NicoAndra\OpenApiGenerator\Attributes\Summary;
-
+use Spatie\LaravelData\Data;
 
 #[Summary('This is the response summary')]
 #[Description('This is the response description')]

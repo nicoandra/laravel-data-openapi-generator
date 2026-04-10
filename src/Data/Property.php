@@ -3,13 +3,13 @@
 namespace NicoAndra\OpenApiGenerator\Data;
 
 use Illuminate\Support\Collection;
+use NicoAndra\OpenApiGenerator\Attributes;
 use ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
+use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Data as LaravelData;
-use \Spatie\LaravelData\Attributes\FromRouteParameter;
-use NicoAndra\OpenApiGenerator\Attributes;
 
 class Property extends Data
 {
@@ -49,17 +49,19 @@ class Property extends Data
 
     public static function fromProperty(ReflectionProperty $reflection): self
     {
-        $annotations = $reflection->getAttributes();
+        $annotations          = $reflection->getAttributes();
         $isFromRouteParameter = false;
         foreach ($annotations as $annotation) {
             $annotationName = $annotation->getName();
-            if ($annotationName === FromRouteParameter::class) {
+            if (FromRouteParameter::class === $annotationName) {
                 $isFromRouteParameter = true;
+
                 break;
             }
         }
 
         $example = (string) Example::fromReflectionAndAttribute($reflection, Attributes\Example::class);
+
         return new self(
             name: $reflection->getName(),
             type: Schema::fromReflectionProperty($reflection),

@@ -2,10 +2,9 @@
 
 namespace NicoAndra\OpenApiGenerator\Test;
 
+use NicoAndra\OpenApiGenerator\Attributes;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Data;
-use NicoAndra\OpenApiGenerator\Attributes;
-
 
 class RequestDataWithRouteParameter extends Data
 {
@@ -15,7 +14,7 @@ class RequestDataWithRouteParameter extends Data
         public string $string,
         #[FromRouteParameter('routeParameter')]
         public string $routeParameter,
-        ) {}
+    ) {}
 
     public static function create(): self
     {

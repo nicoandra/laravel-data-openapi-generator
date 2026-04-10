@@ -2,9 +2,9 @@
 
 namespace NicoAndra\OpenApiGenerator\Test;
 
-use Spatie\LaravelData\Data;
 use NicoAndra\OpenApiGenerator\Attributes\CustomContentType;
 use NicoAndra\OpenApiGenerator\Attributes\Example;
+use Spatie\LaravelData\Data;
 
 #[CustomContentType(type: ['application/json', 'application/xml'])]
 class ContentTypeData extends Data
