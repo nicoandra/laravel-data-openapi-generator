@@ -4,8 +4,8 @@ namespace NicoAndra\OpenApiGenerator\Test;
 
 use Illuminate\Routing\Controller as LaravelController;
 use Spatie\LaravelData\DataCollection;
-use NicoAndra\OpenApiGenerator\Attributes\Description;
-use NicoAndra\OpenApiGenerator\Attributes\Summary;
+use NicoAndra\OpenApiGenerator\Attributes;
+
 class Controller extends LaravelController
 {
     public function noResponse() {}
@@ -62,8 +62,15 @@ class Controller extends LaravelController
         return ReturnData::create($parameter);
     }
 
-    #[Description('This is the method description')]
-    public function stringParameter(string $parameter): ReturnData|ReturnDataWithStatusAttribute
+    #[Attributes\Description('This is the method description')]
+    public function stringParameter(string $parameter): ReturnData
+    {
+        return ReturnData::create($parameter);
+    }
+
+    
+    #[Attributes\Description('This is the multiResponse description')]
+    public function multiResponse(string $parameter): ReturnData|ReturnDataWithStatusAttribute
     {
         return ReturnData::create($parameter);
     }
@@ -73,7 +80,7 @@ class Controller extends LaravelController
         return ReturnData::create($parameter);
     }
 
-    #[Summary('This is a summary')]
+    #[Attributes\Summary('This is a summary')]
     public function requestBasic(RequestData $request): ReturnData
     {
         return ReturnData::create($request);
@@ -84,11 +91,13 @@ class Controller extends LaravelController
         return ReturnData::create($request);
     }
 
-    /**
-     * Summary of allCombined
-     * 
-     */
-    public function allCombined(int $parameter_1, string $parameter_2, Model $parameter_3, RequestData $request): ReturnData
+    #[Attributes\Description('Summary of allCombined')] 
+    public function allCombined(
+        #[Attributes\Example('example value for parameter_1')] int $parameter_1,
+        #[Attributes\Example('example value for parameter_2')] string $parameter_2,
+        #[Attributes\Example('example value for parameter_3')] Model $parameter_3,
+        #[Attributes\Example('example value for request')] RequestData $request
+    ): ReturnData
     {
         return ReturnData::create($parameter_1, $parameter_2, $parameter_3, $request);
     }

@@ -13,7 +13,7 @@ it('can create data response', function () {
         expect(Response::fromRoute($method)->toArray())
             ->toBe([
                 200 => [
-                    'description' => $function,
+                    'description' => 'This is the response description',
                     'content'     => [
                         'application/json' => [
                             'schema' => [
@@ -22,7 +22,44 @@ it('can create data response', function () {
                         ],
                     ],
                 ],
-            ]);
+            ], "Failed on function $function");
+    }
+
+    expect(OpenApi::getTempSchemas())->toMatchArray(
+        ['ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
+    );
+});
+
+
+
+it('can create data response with multiple response return types', function () {
+    foreach (['multiResponse'] as $function) {
+        $route  = new Route('get', '/', [Controller::class, $function]);
+        $method = methodFromRoute($route);
+
+        expect(Response::fromRoute($method)->toArray())
+            ->toBe([
+                200 => [
+                    'description' => 'This is the response description',
+                    'content'     => [
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' => '#/components/schemas/ReturnData',
+                            ],
+                        ],
+                    ],
+                ],
+                420 => [
+                    'description' => 'Jamaica no problem',
+                    'content' =>  [
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' => '#/components/schemas/ReturnDataWithStatusAttribute',
+                            ],
+                        ],
+                    ],
+                ],                
+            ], "Failed on function $function");
     }
 
     expect(OpenApi::getTempSchemas())->toMatchArray(
@@ -39,7 +76,7 @@ it('understands status response attribute', function () {
         expect(Response::fromRoute($method)->toArray())
             ->toBe([
                 420 => [
-                    'description' => $function,
+                    'description' => 'Jamaica no problem',
                     'content'     => [
                         'application/json' => [
                             'schema' => [
@@ -56,8 +93,6 @@ it('understands status response attribute', function () {
     );
 });
 
-
-
 it('can create collection response', function () {
     foreach (['array', 'collection'] as $function) {
         $route  = new Route('get', '/', [Controller::class, $function]);
@@ -65,7 +100,7 @@ it('can create collection response', function () {
 
         expect(Response::fromRoute($method)->toArray())
             ->toBe([200 => [
-                'description' => $function,
+                'description' => '',
                 'content'     => [
                     'application/json' => [
                         'schema' => [
@@ -83,8 +118,6 @@ it('can create collection response', function () {
         ['ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
     );
 });
-
-
 
 
 it('cannot create incomplete collection response', function () {

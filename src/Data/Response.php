@@ -32,8 +32,10 @@ class Response extends Data
                 throw new RuntimeException('Unsupported return type: ' . $type->getName());
             }
 
+            $reflectionClassForDescription = $type->isBuiltin() ? $type : new ReflectionClass($type->getName());
+
             $description = Description::fromReflectionAndAttribute(
-                new ReflectionClass($type->getName()),
+                $reflectionClassForDescription,
                 Attributes\Description::class
             );
             return [

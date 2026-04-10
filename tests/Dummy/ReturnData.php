@@ -2,6 +2,7 @@
 
 namespace NicoAndra\OpenApiGenerator\Test;
 
+use NicoAndra\OpenApiGenerator\Attributes\Example;
 use Spatie\LaravelData\Data;
 use NicoAndra\OpenApiGenerator\Attributes\Description;
 use NicoAndra\OpenApiGenerator\Attributes\Summary;
@@ -12,6 +13,7 @@ use NicoAndra\OpenApiGenerator\Attributes\Summary;
 class ReturnData extends Data
 {
     public function __construct(
+        #[Example('an example string')]
         public string $message = 'test',
     ) {}
 

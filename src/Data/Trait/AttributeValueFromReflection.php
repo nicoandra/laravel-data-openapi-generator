@@ -4,9 +4,14 @@ namespace NicoAndra\OpenApiGenerator\Data\Trait;
 
 trait AttributeValueFromReflection {
     public static function fromReflectionAndAttribute(
-        \ReflectionClass|\ReflectionMethod|\ReflectionFunction $reflection,
+        \ReflectionClass|\ReflectionMethod|\ReflectionFunction|\ReflectionProperty|\ReflectionParameter|\ReflectionNamedType $reflection,
         string $attributeClassName
     ) : self {
+        if($reflection instanceof \ReflectionNamedType) {
+            if($reflection->isBuiltin()) {
+                return new self('');
+            }
+        }
 
         $attributes = $reflection->getAttributes($attributeClassName);
         if (count($attributes) > 0) {

@@ -86,6 +86,25 @@ it('can create properties from data class', function () {
         ]);
 });
 
+it('can create properties with example text', function () {
+    foreach ([ReturnData::class] as $class) {
+        $properties = Property::fromDataClass($class);
+        $types      = array_map(fn (Property $item) => $item->type->toArray(), $properties->all());
+
+        expect($types)
+            ->toBe([
+                [
+                    'type' => 'string',
+                ],
+            ]);
+        
+        foreach ($properties as $property) {
+            expect($property->example)
+                ->toBe('an example string', 'did not match for property: ' . $property->getName());
+        }
+    }
+});
+
 it('can create property from reflection', function () {
     foreach ([RequestData::class, ReturnData::class, ContentTypeData::class] as $class) {
         $reflection = new ReflectionClass($class);

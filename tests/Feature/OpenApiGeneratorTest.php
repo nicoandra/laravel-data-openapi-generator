@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\Config;
 
 beforeAll(function () {
     
+    /*
     $random = rand(1000, 9999);
     $directory = dirname(config('openapi-generator.path')) . DIRECTORY_SEPARATOR . $random;
     Config::set('openapi-generator.path', $directory . DIRECTORY_SEPARATOR . 'openapi.json');
+    */
 
     if (File::exists(config('openapi-generator.path'))) {
         File::delete(config('openapi-generator.path'));

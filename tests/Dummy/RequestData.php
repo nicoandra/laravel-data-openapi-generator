@@ -5,12 +5,14 @@ namespace NicoAndra\OpenApiGenerator\Test;
 use DateTime;
 use DateTimeInterface;
 use Spatie\LaravelData\Data;
+use NicoAndra\OpenApiGenerator\Attributes\Example;
 
 class RequestData extends Data
 {
     public function __construct(
         public int $integer,
         public ?int $nullable_integer,
+        #[Example('the string example')]
         public string $string,
         public ?string $nullable_string,
         public bool $bool,

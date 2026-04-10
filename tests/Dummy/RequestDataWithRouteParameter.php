@@ -11,6 +11,7 @@ class RequestDataWithRouteParameter extends Data
 {
     public function __construct(
         public int $integer,
+        #[Attributes\Example('the string example')]
         public string $string,
         #[FromRouteParameter('routeParameter')]
         public string $routeParameter,

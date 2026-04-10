@@ -10,6 +10,8 @@ use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionParameter;
 use Spatie\LaravelData\Data;
+use NicoAndra\OpenApiGenerator\Attributes;
+
 
 class Parameter extends Data
 {
@@ -19,6 +21,7 @@ class Parameter extends Data
         public string $description,
         public bool $required,
         public Schema $schema,
+        public ?string $example = null
     ) {}
 
     /**
@@ -51,6 +54,7 @@ class Parameter extends Data
             required: $property->required,
             schema: $property->type,
             in: 'query',
+            example: $property->example,
         )) ?? collect([]);
     }
 
@@ -63,12 +67,14 @@ class Parameter extends Data
         );
 
         if($parameter) {
+            $example = (string) Example::fromReflectionAndAttribute($parameter, Attributes\Example::class);
             return new self(
                 name: $parameter->getName(),
                 in: 'path',
                 description: $parameter->getName(),
                 required: ! $parameter->isOptional(),
                 schema: Schema::fromParameterReflection($parameter),
+                example: $example
             );
         }
 
@@ -96,6 +102,7 @@ class Parameter extends Data
                     description: $property->getName(),
                     required: $property->required,
                     schema: $property->type,
+                    example: $property->example
                 );
             }
         }

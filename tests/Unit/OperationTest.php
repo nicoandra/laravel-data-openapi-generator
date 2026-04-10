@@ -102,7 +102,7 @@ it('includes summary in request', function () {
 
 
 it('includes description in request', function () {
-    foreach (['stringParameter'] as $function) {
+    foreach (['multiResponse'] as $function) {
         $method = 'post';
         $route  = new Route($method, '/', [Controller::class, $function]);
         $route->setContainer(app());
@@ -110,7 +110,7 @@ it('includes description in request', function () {
         $operation = Operation::fromRoute($route, $method);
 
         expect($operation->description)
-            ->toBe('This is the method description');
+            ->toBe('This is the multiResponse description');
 
         expect($operation->responses)
             ->toHaveLength(2);

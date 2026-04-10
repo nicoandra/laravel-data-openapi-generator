@@ -9,6 +9,7 @@ use RuntimeException;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Data as LaravelData;
 use \Spatie\LaravelData\Attributes\FromRouteParameter;
+use NicoAndra\OpenApiGenerator\Attributes;
 
 class Property extends Data
 {
@@ -16,7 +17,8 @@ class Property extends Data
         protected string $name,
         public Schema $type,
         public bool $required = true,
-        public bool $isFromRouteParameter = false
+        public bool $isFromRouteParameter = false,
+        public ?string $example = null
     ) {}
 
     public function getName(): string
@@ -57,11 +59,13 @@ class Property extends Data
             }
         }
 
+        $example = (string) Example::fromReflectionAndAttribute($reflection, Attributes\Example::class);
         return new self(
             name: $reflection->getName(),
             type: Schema::fromReflectionProperty($reflection),
             required: ! $reflection->getType()?->allowsNull() ?? false,
             isFromRouteParameter: $isFromRouteParameter,
+            example: $example
         );
     }
 }
