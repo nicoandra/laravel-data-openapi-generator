@@ -3,7 +3,7 @@ name: Code checks
 on:
   pull_request:
     branches:
-      - development
+      - main
 
 # This allows a subsequently queued workflow run to interrupt previous runs
 concurrency:
