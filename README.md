@@ -1,27 +1,15 @@
 # OpenAPI Generator using Laravel Data
 
-Generate OpenAPI specification from Laravel routes and Laravel Data objects
+Generate OpenAPI specification from Laravel routes and Laravel Data objects.
 
-# Install
+Additional features:
+* Leverage `Summary` and `Description` annotations to add extra documentation to your OpenAPI Spec.
+* Allows using route parameters, interpreting the `FromRouteParameter` annotation used by [Laravel-Data](https://spatie.be/docs/laravel-data/v4/as-a-data-transfer-object/injecting-property-values#content-using-scalar-route-parameters)
 
-## Add composer repository
-
-In `composer.json` add this repository:
-
-```json
-    "repositories": [
-        {
-            "type": "github",
-            "url": "https://github.com/nicoandra/laravel-data-openapi-generator"
-        }
-    ],
-```
 
 ## Install
 
 `composer require nicoandra/laravel-data-openapi-generator`
-
-
 
 
 ## Usage
@@ -31,7 +19,7 @@ In `composer.json` add this repository:
 
 ```
 #[Description('This describes the route')]
-#[Description('Summary')]
+#[Summary('Summary')]
 class MyRequest extends Data {
     [...]
 }
@@ -103,7 +91,6 @@ const url = `${import.meta.env.VITE_APP_URL}/api/openapi`;
 ## View
 
 Swagger available at `APP_URL/api/openapi`
-
 
 
 # Development
