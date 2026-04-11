@@ -34,7 +34,7 @@ class Parameter extends Data
         return Parameter::collect(array_map(
             fn (string $parameter) => Parameter::fromParameter($parameter, $method),
             $routeParameterNames,
-        ), Collection::class);
+        ), Collection::class)->values();
     }
 
     /**

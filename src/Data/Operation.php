@@ -102,6 +102,11 @@ class Operation extends Data
         );
     }
 
+    /**
+     * Summary of tagsFromReflection
+     * @param null|ReflectionClass<Data>|ReflectionMethod|ReflectionFunction ...$reflections
+     * @return Collection<int, string>|null
+     */
     private static function tagsFromReflection(null|ReflectionClass|ReflectionMethod|ReflectionFunction ...$reflections): ?Collection
     {
         $tags = collect();
