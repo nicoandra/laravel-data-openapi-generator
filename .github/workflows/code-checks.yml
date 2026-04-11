@@ -13,7 +13,7 @@ concurrency:
 jobs:
   php-code-checks:
     runs-on: ubuntu-latest
-    container: xolvionl/laravel:minimal
+    container: php:8.4.20-cli-alpine3.22
     steps:
       - name: Fix Git permissions
         run: git config --global --add safe.directory *
