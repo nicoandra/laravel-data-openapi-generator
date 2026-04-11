@@ -174,6 +174,7 @@ Important options:
 - `ignored_route_names`: route names to exclude
 - `ignored_methods`: HTTP methods to skip, such as `HEAD` and `OPTIONS`
 - `security_middlewares`: middleware-to-security-scheme mapping
+- `overlay_files`: optional OpenAPI JSON files to add manual documentation gaps
 - `namespace_aliases`: alias internal namespaces in generated schema names
 - `error_scheme_class`: `Data` class used for generated error responses
 
@@ -186,6 +187,26 @@ Example namespace aliasing:
 ```
 
 This keeps schema names stable and avoids exposing internal namespace structure in your OpenAPI document.
+
+### Overlay spec files
+
+Use `overlay_files` when you need manual additions that cannot be inferred from Laravel routes or `Data` classes, such as legacy endpoints, custom headers, or extra response variants.
+
+```php
+'overlay_files' => [
+    resource_path('api/overlay.json'),
+],
+```
+
+Overlay specs are additive. They can add:
+
+- New `paths`.
+- New methods under existing paths.
+- New `responses` by status code under an existing `paths.{route}.{method}` operation.
+- New `components.schemas` entries.
+- New `components.securitySchemes` entries.
+
+The generated spec is authoritative. If the generated file already has a path, method, response status code, schema, or security scheme with the same key, that generated value is kept and the overlay value is ignored for that key. For example, if both generated output and the overlay define `GET /api/users` response `200`, the generated `200` response wins; the overlay can still add `404` or other missing status codes.
 
 ## Security integration
 

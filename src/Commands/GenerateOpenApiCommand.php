@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route as FacadeRoute;
 use NicoAndra\OpenApiGenerator\Data\OpenApi;
+use NicoAndra\OpenApiGenerator\OpenApiSpecMerger;
 
 class GenerateOpenApiCommand extends Command
 {
@@ -17,6 +18,10 @@ class GenerateOpenApiCommand extends Command
     public function handle(): int
     {
         $openapi = OpenApi::fromRoutes($this->getRoutes(), $this);
+        $openapi = app(OpenApiSpecMerger::class)->mergeOverlayFiles(
+            $openapi->toArray(),
+            (array) config('openapi-generator.overlay_files', [])
+        );
 
         $location  = config('openapi-generator.path');
         $directory = dirname($location);
@@ -30,7 +35,7 @@ class GenerateOpenApiCommand extends Command
 
         File::put(
             $location,
-            $openapi->toJson(JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+            json_encode($openapi, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR)
         );
 
         $this->info("OpenAPI documentation generated at {$location}");

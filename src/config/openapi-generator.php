@@ -87,6 +87,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Overlay spec files
+    |--------------------------------------------------------------------------
+    | Additional OpenAPI JSON files to overlay into the generated spec.
+    |
+    | Overlay specs can add paths, components.schemas, components.securitySchemes,
+    | and add new response status codes to existing generated path methods.
+    | The generated spec is authoritative: when an overlay defines a key that
+    | already exists in generated output, the generated value is kept.
+    */
+    'overlay_files' => [
+        // resource_path('api/overlay.json'),
+    ],
+    /*
+    |--------------------------------------------------------------------------
     | Namespace aliases
     |--------------------------------------------------------------------------
     | The namespace sections that should be aliased when generating the OpenAPI file.
