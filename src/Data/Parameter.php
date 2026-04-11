@@ -6,12 +6,11 @@ use Exception;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use NicoAndra\OpenApiGenerator\Attributes;
 use ReflectionFunction;
 use ReflectionMethod;
 use ReflectionParameter;
 use Spatie\LaravelData\Data;
-use NicoAndra\OpenApiGenerator\Attributes;
-
 
 class Parameter extends Data
 {
@@ -30,12 +29,12 @@ class Parameter extends Data
     public static function fromRoute(Route $route, ReflectionFunction|ReflectionMethod $method): Collection
     {
         /** @var string[] */
-        $parameters = $route->parameterNames();
+        $routeParameterNames = $route->parameterNames();
 
         return Parameter::collect(array_map(
             fn (string $parameter) => Parameter::fromParameter($parameter, $method),
-            $parameters,
-        ), Collection::class);
+            $routeParameterNames,
+        ), Collection::class)->values();
     }
 
     /**
@@ -66,8 +65,9 @@ class Parameter extends Data
             fn (ReflectionParameter $parameter) => $parameter->getName() === $name,
         );
 
-        if($parameter) {
+        if ($parameter) {
             $example = (string) Example::fromReflectionAndAttribute($parameter, Attributes\Example::class);
+
             return new self(
                 name: $parameter->getName(),
                 in: 'path',
@@ -78,14 +78,15 @@ class Parameter extends Data
             );
         }
 
-
         foreach ($method->getParameters() as $parameter) {
             $parameterType = $parameter->getType();
 
             if (
-                !$parameterType ||
-                !is_a($parameterType->getName(), Data::class, true)
-            ) continue;
+                ! $parameterType
+                || ! is_a($parameterType->getName(), Data::class, true)
+            ) {
+                continue;
+            }
 
             $dataClassProperties = Property::fromDataClass($parameterType->getName());
 
@@ -108,8 +109,5 @@ class Parameter extends Data
         }
 
         throw new Exception("Parameter {$name} not found in method {$method->getName()}, neither as a property of the associated request class tagged with FromRouteParameter, nor as a parameter of the method itself.");
-        
     }
-
-
 }

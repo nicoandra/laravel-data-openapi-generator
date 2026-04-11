@@ -1,6 +1,5 @@
 <?php
 
-use Spatie\LaravelData\DataCollection;
 use NicoAndra\OpenApiGenerator\Data\OpenApi;
 use NicoAndra\OpenApiGenerator\Data\Schema;
 use NicoAndra\OpenApiGenerator\Test\ContentTypeData;
@@ -9,6 +8,7 @@ use NicoAndra\OpenApiGenerator\Test\IntEnum;
 use NicoAndra\OpenApiGenerator\Test\RequestData;
 use NicoAndra\OpenApiGenerator\Test\ReturnData;
 use NicoAndra\OpenApiGenerator\Test\StringEnum;
+use Spatie\LaravelData\DataCollection;
 
 it('can create built-in schema', function () {
     foreach (['int' => 'integer', 'string' => 'string', 'float' => 'number', 'bool' => 'boolean'] as $type => $expected) {

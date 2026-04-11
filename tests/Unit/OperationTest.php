@@ -53,7 +53,7 @@ it('can create operation with description', function () {
 
     expect($operation->description)
         ->toContain('Summary of allCombined');
-    
+
     expect($operation->parameters)
         ->toHaveLength(3);
 });
@@ -93,13 +93,11 @@ it('includes summary in request', function () {
 
         expect($operation->summary)
             ->toBe('This is a summary');
-        
 
         expect($operation->requestBody)
             ->toBeInstanceOf(RequestBody::class);
     }
 });
-
 
 it('includes description in request', function () {
     foreach (['multiResponse'] as $function) {
@@ -119,10 +117,9 @@ it('includes description in request', function () {
             ->toBe('This is the response description');
 
         expect($operation->responses[420]->description)
-            ->toBe('Jamaica no problem');            
+            ->toBe('Jamaica no problem');
     }
 });
-
 
 it('can create operation with response', function () {
     foreach (['basic', 'array', 'collection', 'intParameter', 'stringParameter', 'modelParameter', 'requestNoData', 'requestBasic', 'allCombined', 'contentType'] as $function) {
@@ -209,7 +206,6 @@ it('can create operation with permissions description', function () {
     }
 });
 
-
 it('can create operation with route parameters', function () {
     $method = 'post';
     $route  = new Route($method, '/{routeParameter}', [Controller::class, 'routeWithRouteParameter']);
@@ -222,5 +218,4 @@ it('can create operation with route parameters', function () {
     expect($parameter->name)->toBe('routeParameter');
     expect($parameter->in)->toBe('path');
     expect($parameter->required)->toBeTrue();
-
 });

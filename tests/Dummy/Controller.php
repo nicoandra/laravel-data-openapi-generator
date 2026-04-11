@@ -3,8 +3,8 @@
 namespace NicoAndra\OpenApiGenerator\Test;
 
 use Illuminate\Routing\Controller as LaravelController;
-use Spatie\LaravelData\DataCollection;
 use NicoAndra\OpenApiGenerator\Attributes;
+use Spatie\LaravelData\DataCollection;
 
 class Controller extends LaravelController
 {
@@ -68,7 +68,6 @@ class Controller extends LaravelController
         return ReturnData::create($parameter);
     }
 
-    
     #[Attributes\Description('This is the multiResponse description')]
     public function multiResponse(string $parameter): ReturnData|ReturnDataWithStatusAttribute
     {
@@ -91,14 +90,17 @@ class Controller extends LaravelController
         return ReturnData::create($request);
     }
 
-    #[Attributes\Description('Summary of allCombined')] 
+    #[Attributes\Description('Summary of allCombined')]
     public function allCombined(
-        #[Attributes\Example('example value for parameter_1')] int $parameter_1,
-        #[Attributes\Example('example value for parameter_2')] string $parameter_2,
-        #[Attributes\Example('example value for parameter_3')] Model $parameter_3,
-        #[Attributes\Example('example value for request')] RequestData $request
-    ): ReturnData
-    {
+        #[Attributes\Example('example value for parameter_1')]
+        int $parameter_1,
+        #[Attributes\Example('example value for parameter_2')]
+        string $parameter_2,
+        #[Attributes\Example('example value for parameter_3')]
+        Model $parameter_3,
+        #[Attributes\Example('example value for request')]
+        RequestData $request
+    ): ReturnData {
         return ReturnData::create($parameter_1, $parameter_2, $parameter_3, $request);
     }
 
@@ -111,7 +113,6 @@ class Controller extends LaravelController
     {
         return ReturnData::from(['message' => $requestData->routeParameter]);
     }
-
 
     public function routeWithStatusAttribute(RequestDataWithRouteParameter $requestData): ReturnDataWithStatusAttribute
     {

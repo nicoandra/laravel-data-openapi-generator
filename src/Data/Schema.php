@@ -5,6 +5,7 @@ namespace NicoAndra\OpenApiGenerator\Data;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use NicoAndra\OpenApiGenerator\Attributes\CustomContentType;
 use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -25,7 +26,6 @@ use Spatie\LaravelData\Support\Factories\DataPropertyFactory;
 use Spatie\LaravelData\Support\Transformation\TransformationContext;
 use Spatie\LaravelData\Support\Transformation\TransformationContextFactory;
 use UnitEnum;
-use NicoAndra\OpenApiGenerator\Attributes\CustomContentType;
 
 class Schema extends Data
 {
@@ -319,13 +319,14 @@ class Schema extends Data
 
     protected static function getClassAliasFromClassName(string $class_name): string
     {
-        /* var $namespaces array<string,string> */
+        // var $namespaces array<string,string>
         $namespaces = config('openapi-generator.namespace_aliases', []);
 
         $result = $class_name;
         foreach ($namespaces as $namespace => $alias) {
             $result = str_replace($namespace . '\\', $alias . '\\', $result);
         }
-        return str_replace('\\', '.', $result);        
+
+        return str_replace('\\', '.', $result);
     }
 }

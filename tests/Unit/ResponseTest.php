@@ -22,15 +22,13 @@ it('can create data response', function () {
                         ],
                     ],
                 ],
-            ], "Failed on function $function");
+            ], "Failed on function {$function}");
     }
 
     expect(OpenApi::getTempSchemas())->toMatchArray(
         ['PublicName.SubPackage.ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
     );
 });
-
-
 
 it('can create data response with multiple response return types', function () {
     foreach (['multiResponse'] as $function) {
@@ -51,22 +49,21 @@ it('can create data response with multiple response return types', function () {
                 ],
                 420 => [
                     'description' => 'Jamaica no problem',
-                    'content' =>  [
+                    'content'     => [
                         'application/json' => [
                             'schema' => [
                                 '$ref' => '#/components/schemas/PublicName.SubPackage.ReturnDataWithStatusAttribute',
                             ],
                         ],
                     ],
-                ],                
-            ], "Failed on function $function");
+                ],
+            ], "Failed on function {$function}");
     }
 
     expect(OpenApi::getTempSchemas())->toMatchArray(
         ['PublicName.SubPackage.ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
     );
 });
-
 
 it('understands status response attribute', function () {
     foreach (['routeWithStatusAttribute'] as $function) {
@@ -118,7 +115,6 @@ it('can create collection response', function () {
         ['PublicName.SubPackage.ReturnData' => 'NicoAndra\\OpenApiGenerator\\Test\\ReturnData']
     );
 });
-
 
 it('cannot create incomplete collection response', function () {
     foreach (['arrayIncompletePath', 'arrayFail', 'collectionIncompletePath', 'collectionFail'] as $function) {

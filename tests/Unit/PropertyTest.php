@@ -97,7 +97,7 @@ it('can create properties with example text', function () {
                     'type' => 'string',
                 ],
             ]);
-        
+
         foreach ($properties as $property) {
             expect($property->example)
                 ->toBe('an example string', 'did not match for property: ' . $property->getName());

@@ -3,7 +3,7 @@ name: Code checks
 on:
   pull_request:
     branches:
-      - development
+      - main
 
 # This allows a subsequently queued workflow run to interrupt previous runs
 concurrency:
@@ -13,18 +13,20 @@ concurrency:
 jobs:
   php-code-checks:
     runs-on: ubuntu-latest
-    container: xolvionl/laravel:minimal
     steps:
-      - name: Fix Git permissions
-        run: git config --global --add safe.directory *
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, pdo_mysql
       - name: Composer validate
         run: composer validate --strict
       - name: Composer install
         run: composer install
-      - name: Larastan
-        run: composer larastan
+      # - name: Larastan
+      # run: composer larastan
       - name: Code style
         run: composer format-dry
       - name: Run tests

@@ -4,8 +4,8 @@ namespace NicoAndra\OpenApiGenerator\Test;
 
 use DateTime;
 use DateTimeInterface;
-use Spatie\LaravelData\Data;
 use NicoAndra\OpenApiGenerator\Attributes\Example;
+use Spatie\LaravelData\Data;
 
 class RequestData extends Data
 {

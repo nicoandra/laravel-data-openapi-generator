@@ -3,6 +3,7 @@
 namespace NicoAndra\OpenApiGenerator\Data;
 
 use Illuminate\Support\Collection;
+use NicoAndra\OpenApiGenerator\Attributes;
 use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -12,7 +13,6 @@ use ReflectionUnionType;
 use RuntimeException;
 use Spatie\LaravelData\Data;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use NicoAndra\OpenApiGenerator\Attributes;
 
 class Response extends Data
 {
@@ -38,6 +38,7 @@ class Response extends Data
                 $reflectionClassForDescription,
                 Attributes\Description::class
             );
+
             return [
                 self::statusCodeFromType($type) => new self(
                     description: $description,
