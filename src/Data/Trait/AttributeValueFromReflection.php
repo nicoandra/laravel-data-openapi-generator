@@ -13,8 +13,9 @@ use Spatie\LaravelData\Data;
 trait AttributeValueFromReflection
 {
     /**
-     * @param ReflectionClass<Data>|ReflectionMethod|ReflectionFunction|ReflectionProperty|ReflectionParameter|ReflectionNamedType $reflection
-     * @param string $attributeClassName
+     * @param ReflectionClass<Data>|ReflectionFunction|ReflectionMethod|ReflectionNamedType|ReflectionParameter|ReflectionProperty $reflection
+     * @param string                                                                                                               $attributeClassName
+     *
      * @return self
      */
     public static function fromReflectionAndAttribute(
@@ -30,9 +31,10 @@ trait AttributeValueFromReflection
         $attributes = method_exists($reflection, 'getAttributes') ? $reflection->getAttributes($attributeClassName) : [];
         if (count($attributes) > 0) {
             $attributeInstance = $attributes[0]->newInstance();
-            if(! property_exists($attributeInstance, 'value')) {
+            if (! property_exists($attributeInstance, 'value')) {
                 return new self('');
             }
+
             return new self($attributeInstance->value);
         }
 
