@@ -49,6 +49,7 @@
         ]        
     },
     "require": {
+        "php": ">=8.4",
         "spatie/laravel-data": "^4",
         "laravel/framework": "^12",
         "phpdocumentor/reflection-docblock": "^5.4",
