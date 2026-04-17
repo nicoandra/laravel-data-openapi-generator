@@ -175,6 +175,7 @@ it('can create operation without description', function () {
     expect($operation->description)
         ->toBe('');
 });
+
 it('can create operation with permissions description', function () {
     $method = 'post';
     $route  = new Route($method, '/', [Controller::class, 'basic']);
@@ -206,16 +207,41 @@ it('can create operation with permissions description', function () {
     }
 });
 
-it('can create operation with route parameters', function () {
-    $method = 'post';
-    $route  = new Route($method, '/{routeParameter}', [Controller::class, 'routeWithRouteParameter']);
-    $route->setContainer(app());
+it('can create a GET operation with route parameters', function () {
+    foreach(['get'] as $method) {
+        $route  = new Route($method, '/{routeParameter}', [Controller::class, 'routeWithRouteParameter']);
+        $route->setContainer(app());
 
-    $operation = Operation::fromRoute($route, $method);
+        $operation = Operation::fromRoute($route, $method);
 
-    expect($operation->parameters)->toHaveLength(1);
-    $parameter = $operation->parameters->first();
-    expect($parameter->name)->toBe('routeParameter');
-    expect($parameter->in)->toBe('path');
-    expect($parameter->required)->toBeTrue();
+        $parameters = $operation->parameters;
+        expect($operation->parameters)->toHaveLength(3);
+        $pathParameter = $parameters->filter(fn ($parameter) => $parameter->in === 'path');
+        expect($pathParameter)->toHaveLength(1, 'Expected to find exactly one path parameter');
+        
+        $parameter = $pathParameter->first();
+        expect($parameter->name)->toBe('routeParameter');
+        expect($parameter->in)->toBe('path');
+        expect($parameter->required)->toBeTrue();
+    }
+});
+
+it('can create a non-GET operation with route parameters', function () {
+    foreach(['post'] as $method) {
+        $route  = new Route($method, '/{routeParameter}', [Controller::class, 'routeWithRouteParameter']);
+        $route->setContainer(app());
+
+        $operation = Operation::fromRoute($route, $method);
+
+        $parameters = $operation->parameters;
+        expect($parameters)->toHaveLength(1);
+
+        $pathParameters = $parameters->filter(fn ($parameter) => $parameter->in === 'path');
+
+        expect($pathParameters)->toHaveLength(1);
+        $pathParameter = $pathParameters->first();
+        expect($pathParameter->name)->toBe('routeParameter');
+        expect($pathParameter->required)->toBeTrue();
+        
+    }
 });

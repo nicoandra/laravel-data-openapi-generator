@@ -7,6 +7,7 @@ use NicoAndra\OpenApiGenerator\Test\Controller;
 use NicoAndra\OpenApiGenerator\Test\IntEnum;
 use NicoAndra\OpenApiGenerator\Test\RequestData;
 use NicoAndra\OpenApiGenerator\Test\ReturnData;
+use NicoAndra\OpenApiGenerator\Test\RequestDataWithRouteParameter;
 use NicoAndra\OpenApiGenerator\Test\StringEnum;
 use Spatie\LaravelData\DataCollection;
 
@@ -61,6 +62,13 @@ it('can create ref data schema', function () {
         );
     }
 });
+
+it('schemas with FromRouteParameter properties should ignore those properties', function () {
+    $schema = Schema::fromDataClass(RequestDataWithRouteParameter::class);
+    expect($schema)->toHaveProperty('type', 'object');
+    expect($schema->toArray()['properties'])->toHaveLength(2);
+});
+
 
 it('can create data schema', function () {
     $schema = Schema::fromDataClass(RequestData::class);

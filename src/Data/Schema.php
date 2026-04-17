@@ -25,6 +25,8 @@ use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Support\Factories\DataPropertyFactory;
 use Spatie\LaravelData\Support\Transformation\TransformationContext;
 use Spatie\LaravelData\Support\Transformation\TransformationContextFactory;
+use NicoAndra\OpenApiGenerator\Attributes;
+
 use UnitEnum;
 
 class Schema extends Data
@@ -190,6 +192,10 @@ class Schema extends Data
 
         if (null !== $this->properties) {
             $array['properties'] = collect($this->properties->all())
+                ->filter(function($property) {
+                    // if the property has the FromRouteParameter attribute, we want to ignore it in the schema, because it is not part of the request body, but rather a path parameter. This is necessary to avoid confusion in the generated OpenAPI documentation, where the property would otherwise appear as a required field in the request body, which is not the case.
+                    return $property->isFromRouteParameter === false;
+                })
                 ->mapWithKeys(fn (Property $property) => [$property->getName() => $property->type->transform($transformationContext)])
                 ->toArray();
 

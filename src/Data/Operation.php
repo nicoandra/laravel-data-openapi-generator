@@ -9,7 +9,6 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log as Logger;
 use NicoAndra\OpenApiGenerator\Attributes;
-use NicoAndra\OpenApiGenerator\Attributes\Tags;
 use ReflectionClass;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -68,12 +67,21 @@ class Operation extends Data
 
         $requestBody = RequestBody::fromRoute($controller_function);
         $params      = Parameter::fromRoute($route, $controller_function);
+
+        $knownParamNames = $params->pluck('name')->all();
+
         if ('get' == $method && $requestBody) {
-            $bodyParams  = Parameter::fromRequestBody($requestBody)->all();
+            $bodyParams  = Parameter::fromRequestBody($requestBody)->filter(
+                function (Parameter $parameter) use ($knownParamNames) {
+                    // Once a parameter is in the path, query, header or cookie parameters, 
+                    // it should not be added as a body parameter, even if it is present in the request body. 
+                    // This is to avoid duplicate parameters in the OpenAPI specification.
+                    return ! in_array($parameter->name, $knownParamNames);
+                });
             $params      = collect([...$params->all(), ...$bodyParams]);
             $requestBody = null;
         }
-
+        
         $description = collect($descriptionLines)->map(fn ($x) => trim($x))->filter(fn ($x) => strlen($x) > 0)->join("\n");
 
         $summary = (string) Summary::fromReflectionAndAttribute($controller_function, Attributes\Summary::class);
@@ -116,9 +124,9 @@ class Operation extends Data
             if (! $reflection) {
                 continue;
             }
-            $attributes = $reflection->getAttributes(Tags::class);
+            $attributes = $reflection->getAttributes(Attributes\Tags::class);
             foreach ($attributes as $attribute) {
-                /** @var Tags $instance */
+                /** @var Attributes\Tags $instance */
                 $instance = $attribute->newInstance();
                 $tags     = $tags->merge($instance->tags);
             }
