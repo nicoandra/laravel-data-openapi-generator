@@ -9,7 +9,6 @@ Route::name('api.openapi.')
     ->group(static function () {
         Route::get('openapi', static function () {
             $route = 'openapi-generator::swagger';
-
             return view($route, ['json_url' => route('api.openapi.json')]);
         })->name('page');
 
