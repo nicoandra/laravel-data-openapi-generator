@@ -13,7 +13,4 @@ services:
     restart: unless-stopped
     working_dir: /var/www/html
     volumes:
-      - type: bind
-        source: ./
-        target: /var/www/html
-
+      - ./:/var/www/html
