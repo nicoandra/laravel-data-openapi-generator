@@ -49,12 +49,12 @@
         ]        
     },
     "require": {
-        "php": ">=8.4",
+        "php": ">=8.2",
         "spatie/laravel-data": "^4",
         "phpdocumentor/reflection-docblock": "^5.4",
         "spatie/invade": "^2",
         "phpunit/phpunit": "^11",
-        "laravel/framework": "^13.5"
+        "laravel/framework": "^8|^9|^10|^11|^12|^13"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.95",
