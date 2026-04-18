@@ -1,5 +1,5 @@
 # Use development image
-FROM thecodingmachine/php:8.2-v5-cli-node20 AS base
+FROM thecodingmachine/php:8.4-v5-cli-node20 AS base
 
 USER root
 

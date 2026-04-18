@@ -17,5 +17,7 @@ it('creates routes', function () {
         ->toBe([
             'api/openapi',
             'api/openapi.json',
+            'storage/{path}',
+            'storage/{path}',
         ]);
 });

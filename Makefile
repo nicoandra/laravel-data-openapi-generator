@@ -8,6 +8,8 @@ test:
 test-coverage:
 	docker-compose run --rm -v $(PWD):/var/www/html openapi-generator composer run test-coverage
 
+format:
+	docker-compose run --rm -v $(PWD):/var/www/html openapi-generator composer run format
 
 dev:
 	docker-compose up --build openapi-generator
