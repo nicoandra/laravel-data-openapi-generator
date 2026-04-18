@@ -35,6 +35,9 @@ class Schema extends Data
         'float' => 'number',
     ];
 
+    /**
+     * @param array<int|string> $enum
+     */
     public function __construct(
         public ?string $type = null,
         public ?bool $nullable = null,
@@ -225,7 +228,9 @@ class Schema extends Data
         $values    = null;
         if ($enum->isBacked() && $type = $enum->getBackingType()) {
             $type_name = (string) $type;
-            $values    = collect($enum->getCases())->map(fn (ReflectionEnumBackedCase $case) => $case->getBackingValue())->all();
+            $values    = collect($enum->getCases())->map(
+                fn (ReflectionEnumBackedCase $case) => $case->getBackingValue()
+            )->all();
         }
 
         return new self(type: $type_name, nullable: $nullable, enum: $values);
@@ -239,13 +244,7 @@ class Schema extends Data
             throw new RuntimeException("Type {$type_name} is not a Data class");
         }
 
-        $scheme_name = last(explode('\\', $type_name));
-
         $scheme_name = self::getClassAliasFromClassName($type_name);
-
-        if (! $scheme_name || ! is_string($scheme_name)) {
-            throw new RuntimeException("Cannot read basename from {$type_name}");
-        }
 
         /** @var class-string<LaravelData> $type_name */
         OpenApi::addClassSchema($scheme_name, $type_name);

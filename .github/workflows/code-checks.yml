@@ -30,10 +30,6 @@ jobs:
       # - name: Larastan
       # run: composer larastan
       - name: Code style
-        run: >
-          for f in tests/Unit/OperationTest.php src/Data/Schema.php src/Data/Operation.php tests/Unit/SchemaTest.php; do
-            md5sum $f;
-          done;
-          composer format-dry
+        run: composer format-dry
       - name: Run tests
         run: composer test
