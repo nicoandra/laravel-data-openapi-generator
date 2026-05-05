@@ -118,4 +118,20 @@ class Controller extends LaravelController
     {
         return ReturnDataWithStatusAttribute::create();
     }
+
+    public function requestWithIgnoredProperty(RequestDataWithIgnoredProperty $request): ReturnData
+    {
+        return ReturnData::create($request);
+    }
+
+    public function requestWithIgnoredPropertyGet(RequestDataWithIgnoredProperty $request): ReturnData
+    {
+        return ReturnData::create($request);
+    }
+
+    #[Attributes\IgnoreFromOpenApi]
+    public function ignoredMethod(): ReturnData
+    {
+        return new ReturnData();
+    }
 }

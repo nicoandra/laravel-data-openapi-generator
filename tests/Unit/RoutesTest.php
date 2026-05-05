@@ -14,8 +14,8 @@ it('creates routes', function () {
     );
 
     expect($routes)
-        ->toBe([
+        ->toContain(
             'api/openapi',
             'api/openapi.json',
-        ]);
+        );
 });

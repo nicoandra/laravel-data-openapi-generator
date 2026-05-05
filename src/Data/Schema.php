@@ -192,15 +192,12 @@ class Schema extends Data
 
         if (null !== $this->properties) {
             $array['properties'] = collect($this->properties->all())
-                ->filter(function($property) {
-                    // if the property has the FromRouteParameter attribute, we want to ignore it in the schema, because it is not part of the request body, but rather a path parameter. This is necessary to avoid confusion in the generated OpenAPI documentation, where the property would otherwise appear as a required field in the request body, which is not the case.
-                    return $property->isFromRouteParameter === false;
-                })
+                ->filter(fn (Property $property) => $property->shouldBeIncludedInRequest())
                 ->mapWithKeys(fn (Property $property) => [$property->getName() => $property->type->transform($transformationContext)])
                 ->toArray();
 
             $array['required'] = collect($this->properties->all())
-                ->filter(fn (Property $property) => $property->required)
+                ->filter(fn (Property $property) => $property->required && $property->shouldBeIncludedInRequest())
                 ->map(fn (Property $property) => $property->getName())
                 ->values()
                 ->toArray();

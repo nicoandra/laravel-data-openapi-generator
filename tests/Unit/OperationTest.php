@@ -245,3 +245,31 @@ it('can create a non-GET operation with route parameters', function () {
         
     }
 });
+
+it('excludes ignored request properties from GET query parameters', function () {
+    $method = 'get';
+    $route  = new Route($method, '/', [Controller::class, 'requestWithIgnoredPropertyGet']);
+    $route->setContainer(app());
+
+    $operation = Operation::fromRoute($route, $method);
+
+    expect($operation->parameters?->toArray())
+        ->toBe([
+            [
+                'name' => 'integer',
+                'in' => 'query',
+                'description' => 'integer',
+                'required' => true,
+                'schema' => ['type' => 'integer'],
+                'example' => '',
+            ],
+            [
+                'name' => 'string',
+                'in' => 'query',
+                'description' => 'string',
+                'required' => true,
+                'schema' => ['type' => 'string'],
+                'example' => '',
+            ],
+        ]);
+});

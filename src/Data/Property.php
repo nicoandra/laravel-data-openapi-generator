@@ -7,6 +7,7 @@ use NicoAndra\OpenApiGenerator\Attributes;
 use ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
+use NicoAndra\OpenApiGenerator\Attributes\IgnoreFromOpenApi;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Data as LaravelData;
@@ -18,12 +19,18 @@ class Property extends Data
         public Schema $type,
         public bool $required = true,
         public bool $isFromRouteParameter = false,
+        public bool $isIgnoredFromRequest = false,
         public ?string $example = null
     ) {}
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function shouldBeIncludedInRequest(): bool
+    {
+        return ! $this->isFromRouteParameter && ! $this->isIgnoredFromRequest;
     }
 
     /**
@@ -51,13 +58,17 @@ class Property extends Data
     {
         $annotations          = $reflection->getAttributes();
         $isFromRouteParameter = false;
+        $isIgnoredFromRequest = false;
         foreach ($annotations as $annotation) {
             $annotationName = $annotation->getName();
             if (FromRouteParameter::class === $annotationName) {
                 $isFromRouteParameter = true;
-
-                break;
             }
+
+            if (IgnoreFromOpenApi::class === $annotationName) {
+                $isIgnoredFromRequest = true;
+            }
+
         }
 
         $example = (string) Example::fromReflectionAndAttribute($reflection, Attributes\Example::class);
@@ -67,6 +78,7 @@ class Property extends Data
             type: Schema::fromReflectionProperty($reflection),
             required: ! $reflection->getType()?->allowsNull() ?? false,
             isFromRouteParameter: $isFromRouteParameter,
+            isIgnoredFromRequest: $isIgnoredFromRequest,
             example: $example
         );
     }
