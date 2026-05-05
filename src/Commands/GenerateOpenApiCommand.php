@@ -7,8 +7,10 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route as FacadeRoute;
+use NicoAndra\OpenApiGenerator\Attributes\IgnoreFromOpenApi;
 use NicoAndra\OpenApiGenerator\Data\OpenApi;
 use NicoAndra\OpenApiGenerator\OpenApiSpecMerger;
+use ReflectionClass;
 
 class GenerateOpenApiCommand extends Command
 {
@@ -71,6 +73,11 @@ class GenerateOpenApiCommand extends Command
 
                     return false;
                 }
+                if ($this->hasIgnoreFromOpenApiAttribute($route)) {
+                    Log::info("Skipping route {$name} {$uri}, it is marked with " . IgnoreFromOpenApi::class);
+
+                    return false;
+                }
 
                 return true;
             }
@@ -111,5 +118,23 @@ class GenerateOpenApiCommand extends Command
         }
 
         return false;
+    }
+
+    protected function hasIgnoreFromOpenApiAttribute(Route $route): bool
+    {
+        $uses = $route->action['uses'] ?? null;
+
+        if (! is_string($uses)) {
+            return false;
+        }
+
+        $controller = $route->getController();
+        $class      = new ReflectionClass($controller);
+
+        if ([] !== $class->getAttributes(IgnoreFromOpenApi::class)) {
+            return true;
+        }
+
+        return [] !== $class->getMethod($route->getActionMethod())->getAttributes(IgnoreFromOpenApi::class);
     }
 }

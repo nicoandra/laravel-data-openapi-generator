@@ -208,17 +208,17 @@ it('can create operation with permissions description', function () {
 });
 
 it('can create a GET operation with route parameters', function () {
-    foreach(['get'] as $method) {
-        $route  = new Route($method, '/{routeParameter}', [Controller::class, 'routeWithRouteParameter']);
+    foreach (['get'] as $method) {
+        $route = new Route($method, '/{routeParameter}', [Controller::class, 'routeWithRouteParameter']);
         $route->setContainer(app());
 
         $operation = Operation::fromRoute($route, $method);
 
         $parameters = $operation->parameters;
         expect($operation->parameters)->toHaveLength(3);
-        $pathParameter = $parameters->filter(fn ($parameter) => $parameter->in === 'path');
+        $pathParameter = $parameters->filter(fn ($parameter) => 'path' === $parameter->in);
         expect($pathParameter)->toHaveLength(1, 'Expected to find exactly one path parameter');
-        
+
         $parameter = $pathParameter->first();
         expect($parameter->name)->toBe('routeParameter');
         expect($parameter->in)->toBe('path');
@@ -227,8 +227,8 @@ it('can create a GET operation with route parameters', function () {
 });
 
 it('can create a non-GET operation with route parameters', function () {
-    foreach(['post'] as $method) {
-        $route  = new Route($method, '/{routeParameter}', [Controller::class, 'routeWithRouteParameter']);
+    foreach (['post'] as $method) {
+        $route = new Route($method, '/{routeParameter}', [Controller::class, 'routeWithRouteParameter']);
         $route->setContainer(app());
 
         $operation = Operation::fromRoute($route, $method);
@@ -236,12 +236,39 @@ it('can create a non-GET operation with route parameters', function () {
         $parameters = $operation->parameters;
         expect($parameters)->toHaveLength(1);
 
-        $pathParameters = $parameters->filter(fn ($parameter) => $parameter->in === 'path');
+        $pathParameters = $parameters->filter(fn ($parameter) => 'path' === $parameter->in);
 
         expect($pathParameters)->toHaveLength(1);
         $pathParameter = $pathParameters->first();
         expect($pathParameter->name)->toBe('routeParameter');
         expect($pathParameter->required)->toBeTrue();
-        
     }
+});
+
+it('excludes ignored request properties from GET query parameters', function () {
+    $method = 'get';
+    $route  = new Route($method, '/', [Controller::class, 'requestWithIgnoredPropertyGet']);
+    $route->setContainer(app());
+
+    $operation = Operation::fromRoute($route, $method);
+
+    expect($operation->parameters?->toArray())
+        ->toBe([
+            [
+                'name'        => 'integer',
+                'in'          => 'query',
+                'description' => 'integer',
+                'required'    => true,
+                'schema'      => ['type' => 'integer'],
+                'example'     => '',
+            ],
+            [
+                'name'        => 'string',
+                'in'          => 'query',
+                'description' => 'string',
+                'required'    => true,
+                'schema'      => ['type' => 'string'],
+                'example'     => '',
+            ],
+        ]);
 });

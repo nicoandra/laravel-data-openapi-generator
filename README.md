@@ -11,6 +11,7 @@ The package treats your controllers and `Data` objects as the source of truth fo
 - Supports route parameters declared directly in controller methods.
 - Supports route parameters injected through `#[FromRouteParameter(...)]`.
 - Reads `#[Summary]`, `#[Description]`, and `#[Example]` attributes to enrich the generated spec.
+- Supports `#[IgnoreFromOpenApi]` on request properties, controller classes, and controller methods, to keep utility methods from being exposed to the public.
 - Supports custom response status codes through `#[HttpResponseStatus(...)]`.
 - Supports multiple content types through `#[CustomContentType(...)]`.
 - Adds security requirements and `401` / `403` responses from configured middleware.
@@ -42,6 +43,7 @@ namespace App\Data;
 
 use NicoAndra\OpenApiGenerator\Attributes\Description;
 use NicoAndra\OpenApiGenerator\Attributes\Example;
+use NicoAndra\OpenApiGenerator\Attributes\IgnoreFromOpenApi;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Data;
 
@@ -52,6 +54,8 @@ class CreatePostData extends Data
         public int $authorId,
         #[Example('How to keep docs in sync with code')]
         public string $title,
+        #[IgnoreFromOpenApi]
+        public int $tenantId,
         public string $body,
     ) {}
 }
@@ -131,6 +135,12 @@ Attach to a `Data` class to describe the response associated with that class.
 ### `#[Example(...)]`
 
 Attach to a `Data` property or controller parameter to add example values to the generated schema or parameter.
+
+### `#[IgnoreFromOpenApi]`
+
+Attach to a request `Data` property to exclude it from generated request bodies and derived `GET` query parameters.
+
+Attach to a controller class or controller method to exclude matching routes from the generated OpenAPI document.
 
 ### `#[HttpResponseStatus(...)]`
 

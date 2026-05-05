@@ -71,17 +71,18 @@ class Operation extends Data
         $knownParamNames = $params->pluck('name')->all();
 
         if ('get' == $method && $requestBody) {
-            $bodyParams  = Parameter::fromRequestBody($requestBody)->filter(
+            $bodyParams = Parameter::fromRequestBody($requestBody)->filter(
                 function (Parameter $parameter) use ($knownParamNames) {
-                    // Once a parameter is in the path, query, header or cookie parameters, 
-                    // it should not be added as a body parameter, even if it is present in the request body. 
+                    // Once a parameter is in the path, query, header or cookie parameters,
+                    // it should not be added as a body parameter, even if it is present in the request body.
                     // This is to avoid duplicate parameters in the OpenAPI specification.
                     return ! in_array($parameter->name, $knownParamNames);
-                });
+                }
+            );
             $params      = collect([...$params->all(), ...$bodyParams]);
             $requestBody = null;
         }
-        
+
         $description = collect($descriptionLines)->map(fn ($x) => trim($x))->filter(fn ($x) => strlen($x) > 0)->join("\n");
 
         $summary = (string) Summary::fromReflectionAndAttribute($controller_function, Attributes\Summary::class);
