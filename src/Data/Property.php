@@ -4,10 +4,10 @@ namespace NicoAndra\OpenApiGenerator\Data;
 
 use Illuminate\Support\Collection;
 use NicoAndra\OpenApiGenerator\Attributes;
+use NicoAndra\OpenApiGenerator\Attributes\IgnoreFromOpenApi;
 use ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
-use NicoAndra\OpenApiGenerator\Attributes\IgnoreFromOpenApi;
 use Spatie\LaravelData\Attributes\FromRouteParameter;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Data as LaravelData;
@@ -68,7 +68,6 @@ class Property extends Data
             if (IgnoreFromOpenApi::class === $annotationName) {
                 $isIgnoredFromRequest = true;
             }
-
         }
 
         $example = (string) Example::fromReflectionAndAttribute($reflection, Attributes\Example::class);

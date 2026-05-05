@@ -76,27 +76,27 @@ it('can generate json', function () {
     expect($parsed['components']['schemas']['PublicName.SubPackage.RequestDataWithIgnoredProperty']['properties'])
         ->toBe([
             'integer' => ['type' => 'integer'],
-            'string' => ['type' => 'string'],
+            'string'  => ['type' => 'string'],
         ]);
     expect($parsed['components']['schemas']['PublicName.SubPackage.RequestDataWithIgnoredProperty']['required'])
         ->toBe(['integer', 'string']);
     expect($parsed['paths']['/api/requestWithIgnoredProperty']['get']['parameters'])
         ->toBe([
             [
-                'name' => 'integer',
-                'in' => 'query',
+                'name'        => 'integer',
+                'in'          => 'query',
                 'description' => 'integer',
-                'required' => true,
-                'schema' => ['type' => 'integer'],
-                'example' => '',
+                'required'    => true,
+                'schema'      => ['type' => 'integer'],
+                'example'     => '',
             ],
             [
-                'name' => 'string',
-                'in' => 'query',
+                'name'        => 'string',
+                'in'          => 'query',
                 'description' => 'string',
-                'required' => true,
-                'schema' => ['type' => 'string'],
-                'example' => '',
+                'required'    => true,
+                'schema'      => ['type' => 'string'],
+                'example'     => '',
             ],
         ]);
 });

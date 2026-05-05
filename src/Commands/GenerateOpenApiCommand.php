@@ -131,10 +131,10 @@ class GenerateOpenApiCommand extends Command
         $controller = $route->getController();
         $class      = new ReflectionClass($controller);
 
-        if ($class->getAttributes(IgnoreFromOpenApi::class) !== []) {
+        if ([] !== $class->getAttributes(IgnoreFromOpenApi::class)) {
             return true;
         }
 
-        return $class->getMethod($route->getActionMethod())->getAttributes(IgnoreFromOpenApi::class) !== [];
+        return [] !== $class->getMethod($route->getActionMethod())->getAttributes(IgnoreFromOpenApi::class);
     }
 }

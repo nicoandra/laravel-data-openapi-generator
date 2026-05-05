@@ -25,8 +25,6 @@ use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Support\Factories\DataPropertyFactory;
 use Spatie\LaravelData\Support\Transformation\TransformationContext;
 use Spatie\LaravelData\Support\Transformation\TransformationContextFactory;
-use NicoAndra\OpenApiGenerator\Attributes;
-
 use UnitEnum;
 
 class Schema extends Data
