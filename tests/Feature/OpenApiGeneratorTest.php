@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use NicoAndra\OpenApiGenerator\Test\Controller;
+use NicoAndra\OpenApiGenerator\Test\IgnoredController;
 
 beforeAll(function () {
     /*
@@ -26,11 +27,19 @@ beforeAll(function () {
             ->name('routeWithRouteParameter');
         Route::post('/contentType', [Controller::class, 'contentType'])
             ->name('contentType');
+        Route::post('/requestWithIgnoredProperty', [Controller::class, 'requestWithIgnoredProperty'])
+            ->name('requestWithIgnoredProperty');
+        Route::get('/requestWithIgnoredProperty', [Controller::class, 'requestWithIgnoredPropertyGet'])
+            ->name('requestWithIgnoredPropertyGet');
         Route::get('/auth', [Controller::class, 'basic'])
             ->can('permission1')
             ->middleware('can:permission2')
             ->middleware('auth:sanctum')
             ->name('auth');
+        Route::get('/ignoredMethod', [Controller::class, 'ignoredMethod'])
+            ->name('ignoredMethod');
+        Route::get('/ignoredClass', [IgnoredController::class, 'basic'])
+            ->name('ignoredClass');
         Route::get('/authIgnored', [Controller::class, 'basic'])
             ->can('permission1')
             ->middleware('can:permission2')
@@ -60,7 +69,36 @@ it('can generate json', function () {
     expect($parsed)->toHaveKey('paths');
     expect($parsed['paths'])->toHaveKey('/api/auth');
     expect($parsed['paths'])->not->toHaveKey('/api/authIgnored');
+    expect($parsed['paths'])->not->toHaveKey('/api/ignoredMethod');
+    expect($parsed['paths'])->not->toHaveKey('/api/ignoredClass');
     expect($parsed['paths'])->not->toHaveKey('/excludedPrefix/authIgnored');
+
+    expect($parsed['components']['schemas']['PublicName.SubPackage.RequestDataWithIgnoredProperty']['properties'])
+        ->toBe([
+            'integer' => ['type' => 'integer'],
+            'string'  => ['type' => 'string'],
+        ]);
+    expect($parsed['components']['schemas']['PublicName.SubPackage.RequestDataWithIgnoredProperty']['required'])
+        ->toBe(['integer', 'string']);
+    expect($parsed['paths']['/api/requestWithIgnoredProperty']['get']['parameters'])
+        ->toBe([
+            [
+                'name'        => 'integer',
+                'in'          => 'query',
+                'description' => 'integer',
+                'required'    => true,
+                'schema'      => ['type' => 'integer'],
+                'example'     => '',
+            ],
+            [
+                'name'        => 'string',
+                'in'          => 'query',
+                'description' => 'string',
+                'required'    => true,
+                'schema'      => ['type' => 'string'],
+                'example'     => '',
+            ],
+        ]);
 });
 
 it('can generate json with overlay spec files', function () {

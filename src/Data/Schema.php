@@ -193,11 +193,12 @@ class Schema extends Data
 
         if (null !== $this->properties) {
             $array['properties'] = collect($this->properties->all())
+                ->filter(fn (Property $property) => $property->shouldBeIncludedInRequest())
                 ->mapWithKeys(fn (Property $property) => [$property->getName() => $property->type->transform($transformationContext)])
                 ->toArray();
 
             $array['required'] = collect($this->properties->all())
-                ->filter(fn (Property $property) => $property->required)
+                ->filter(fn (Property $property) => $property->required && $property->shouldBeIncludedInRequest())
                 ->map(fn (Property $property) => $property->getName())
                 ->values()
                 ->toArray();

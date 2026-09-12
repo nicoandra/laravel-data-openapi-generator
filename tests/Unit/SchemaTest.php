@@ -6,6 +6,8 @@ use NicoAndra\OpenApiGenerator\Test\ContentTypeData;
 use NicoAndra\OpenApiGenerator\Test\Controller;
 use NicoAndra\OpenApiGenerator\Test\IntEnum;
 use NicoAndra\OpenApiGenerator\Test\RequestData;
+use NicoAndra\OpenApiGenerator\Test\RequestDataWithIgnoredProperty;
+use NicoAndra\OpenApiGenerator\Test\RequestDataWithRouteParameter;
 use NicoAndra\OpenApiGenerator\Test\ReturnData;
 use NicoAndra\OpenApiGenerator\Test\StringEnum;
 use Spatie\LaravelData\DataCollection;
@@ -60,6 +62,26 @@ it('can create ref data schema', function () {
             ['PublicName.SubPackage.' . class_basename($class) => $class]
         );
     }
+});
+
+it('schemas with FromRouteParameter properties should ignore those properties', function () {
+    $schema = Schema::fromDataClass(RequestDataWithRouteParameter::class);
+    expect($schema)->toHaveProperty('type', 'object');
+    expect($schema->toArray()['properties'])->toHaveLength(2);
+    expect($schema->toArray()['required'])->toBe(['integer', 'string']);
+});
+
+it('schemas with ignored properties should exclude them from request properties and required fields', function () {
+    $schema = Schema::fromDataClass(RequestDataWithIgnoredProperty::class)->toArray();
+
+    expect($schema)->toBe([
+        'type'       => 'object',
+        'properties' => [
+            'integer' => ['type' => 'integer'],
+            'string'  => ['type' => 'string'],
+        ],
+        'required' => ['integer', 'string'],
+    ]);
 });
 
 it('can create data schema', function () {

@@ -47,14 +47,17 @@ class Parameter extends Data
          * but we can have request objects that read out parameters from the query parameters
          * So here we convert a request body into parameters
          */
-        return $requestBody->content->schema?->resolveRef()?->getObjectProperties()?->map(fn (Property $property) => new self(
-            name: $property->getName(),
-            description: $property->getName(),
-            required: $property->required,
-            schema: $property->type,
-            in: 'query',
-            example: $property->example,
-        )) ?? collect([]);
+        return $requestBody->content->schema?->resolveRef()?->getObjectProperties()
+            ?->filter(fn (Property $property) => $property->shouldBeIncludedInRequest())
+            ?->map(fn (Property $property) => new self(
+                name: $property->getName(),
+                description: $property->getName(),
+                required: $property->required,
+                schema: $property->type,
+                in: 'query',
+                example: $property->example,
+            ))
+            ?->values() ?? collect([]);
     }
 
     public static function fromParameter(string $name, ReflectionFunction|ReflectionMethod $method): self

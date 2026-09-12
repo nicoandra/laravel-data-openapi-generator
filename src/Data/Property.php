@@ -4,6 +4,7 @@ namespace NicoAndra\OpenApiGenerator\Data;
 
 use Illuminate\Support\Collection;
 use NicoAndra\OpenApiGenerator\Attributes;
+use NicoAndra\OpenApiGenerator\Attributes\IgnoreFromOpenApi;
 use ReflectionClass;
 use ReflectionProperty;
 use RuntimeException;
@@ -18,12 +19,18 @@ class Property extends Data
         public Schema $type,
         public bool $required = true,
         public bool $isFromRouteParameter = false,
+        public bool $isIgnoredFromRequest = false,
         public ?string $example = null
     ) {}
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function shouldBeIncludedInRequest(): bool
+    {
+        return ! $this->isFromRouteParameter && ! $this->isIgnoredFromRequest;
     }
 
     /**
@@ -51,12 +58,15 @@ class Property extends Data
     {
         $annotations          = $reflection->getAttributes();
         $isFromRouteParameter = false;
+        $isIgnoredFromRequest = false;
         foreach ($annotations as $annotation) {
             $annotationName = $annotation->getName();
             if (FromRouteParameter::class === $annotationName) {
                 $isFromRouteParameter = true;
+            }
 
-                break;
+            if (IgnoreFromOpenApi::class === $annotationName) {
+                $isIgnoredFromRequest = true;
             }
         }
 
@@ -67,6 +77,7 @@ class Property extends Data
             type: Schema::fromReflectionProperty($reflection),
             required: ! $reflection->getType()?->allowsNull() ?? false,
             isFromRouteParameter: $isFromRouteParameter,
+            isIgnoredFromRequest: $isIgnoredFromRequest,
             example: $example
         );
     }
