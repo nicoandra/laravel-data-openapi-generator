@@ -3,3 +3,5 @@
 .phpunit.result.cache
 .phpunit.cache
 coverage/
+# Local Pi runtime state
+.atl/
