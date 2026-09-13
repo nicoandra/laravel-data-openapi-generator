@@ -16,13 +16,20 @@ beforeEach(function () {
 });
 
 it('round trips a nested data object through the attribute', function () {
-    $payload = new SignedStringData('Ada');
+    $payload = new SignedStringData('Ada', new \NicoAndra\OpenApiGenerator\Test\SignedStringNestedData('profile', null));
     $token   = (new SignedStringCodec(['test' => str_repeat('s', 32)], 'test'))->encode($payload);
 
     $container = SignedStringContainerData::from(['payload' => $token]);
 
     expect($container->payload->toArray())->toBe($payload->toArray())
         ->and($container->transform()['payload'])->toBe($token);
+});
+
+it('performs deterministic repeated transformations and optional nested values', function () {
+    $payload   = new SignedStringData('Ada');
+    $container = new SignedStringContainerData($payload);
+
+    expect($container->transform()['payload'])->toBe($container->transform()['payload']);
 });
 
 it('preserves nullable values', function () {
@@ -46,6 +53,14 @@ it('delegates hydration and transformation to Laravel Data and the codec', funct
 it('rejects non-string cast input', function () {
     expect(fn () => SignedStringContainerData::from(['payload' => ['value' => 'Ada']]))
         ->toThrow(InvalidArgumentException::class, 'Signed string input must be a string or null.');
+});
+
+it('rejects non-Data values during transformation', function () {
+    $adapter  = new SignedStringCastTransformer();
+    $property = propertyFor(SignedStringContainerData::class);
+
+    expect(fn () => $adapter->transform($property, ['value' => 'Ada'], new TransformationContext()))
+        ->toThrow(InvalidArgumentException::class, 'Signed string value must be a Laravel Data object or null.');
 });
 
 it('verifies before hydrating the target data', function () {
