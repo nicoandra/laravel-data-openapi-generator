@@ -29,6 +29,12 @@ On output, Laravel Data invokes the transformer. It requires a `Data` object (or
 
 On input, Laravel Data invokes the cast. It requires a string (or `null`), and the codec verifies the token before the target class is hydrated with `TargetData::from($decodedData)`. This ordering prevents an unauthenticated payload from being hydrated. Codec validation failures use `RuntimeException('Invalid signed string')`. Invalid cast/transformer values and an incompatible target property use `InvalidArgumentException`; errors raised by Laravel Data while hydrating the verified data remain framework-specific.
 
+### Trust boundary for construction
+
+Request-bound signed fields must be hydrated through Laravel Data request handling. This preserves the request field as a string token so the cast receives it and verifies it before hydration. Do not use `SignedClass::from($request->toArray())`: converting the request to an ordinary array removes the distinction between request data and trusted code at this boundary.
+
+For trusted programmatic construction, use `new SignedClass(...)` with the nested `Data` object, not `SignedClass::from(array [...])`. This is a documented usage rule, not automatic origin detection: the cast has no reliable request-origin marker and does not receive the original payload.
+
 ## Wire format
 
 A token has exactly three dot-separated ASCII segments:

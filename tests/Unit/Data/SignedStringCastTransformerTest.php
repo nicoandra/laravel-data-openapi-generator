@@ -26,10 +26,14 @@ it('round trips a nested data object through the attribute', function () {
 });
 
 it('performs deterministic repeated transformations and optional nested values', function () {
-    $payload   = new SignedStringData('Ada');
+    $payload   = new SignedStringData('Ada', new \NicoAndra\OpenApiGenerator\Test\SignedStringNestedData('profile', null));
     $container = new SignedStringContainerData($payload);
+    $token     = $container->transform()['payload'];
+    $codec     = new SignedStringCodec(['test' => str_repeat('s', 32)], 'test');
 
-    expect($container->transform()['payload'])->toBe($container->transform()['payload']);
+    expect($container->payload)->toBe($payload)
+        ->and($codec->decode($token))->toEqual($payload->toArray())
+        ->and($token)->toBe($container->transform()['payload']);
 });
 
 it('preserves nullable values', function () {
