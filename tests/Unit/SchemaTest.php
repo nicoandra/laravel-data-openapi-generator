@@ -1,5 +1,6 @@
 <?php
 
+use NicoAndra\OpenApiGenerator\Data\Cast\SignedStringCastTransformer;
 use NicoAndra\OpenApiGenerator\Data\OpenApi;
 use NicoAndra\OpenApiGenerator\Data\Schema;
 use NicoAndra\OpenApiGenerator\Test\ContentTypeData;
@@ -9,7 +10,10 @@ use NicoAndra\OpenApiGenerator\Test\RequestData;
 use NicoAndra\OpenApiGenerator\Test\RequestDataWithIgnoredProperty;
 use NicoAndra\OpenApiGenerator\Test\RequestDataWithRouteParameter;
 use NicoAndra\OpenApiGenerator\Test\ReturnData;
+use NicoAndra\OpenApiGenerator\Test\SignedStringContainerData;
 use NicoAndra\OpenApiGenerator\Test\StringEnum;
+use Spatie\LaravelData\Attributes\WithCast;
+use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
 
 it('can create built-in schema', function () {
@@ -84,8 +88,30 @@ it('schemas with ignored properties should exclude them from request properties 
     ]);
 });
 
+it('represents paired signed string casts as strings', function () {
+    $schema = Schema::fromDataClass(SignedStringContainerData::class)->toArray();
+
+    expect($schema['properties']['payload'])->toBe([
+        'type'     => 'string',
+        'nullable' => true,
+    ]);
+});
+
+it('rejects a signed string cast without its transformer', function () {
+    expect(fn () => Schema::fromDataClass(SignedStringCastOnlyData::class))
+        ->toThrow(RuntimeException::class, 'Attribute SignedStringCastOnlyData::payload requires SignedStringCastTransformer');
+});
+
 it('can create data schema', function () {
     $schema = Schema::fromDataClass(RequestData::class);
     expect($schema)->toHaveProperty('type', 'object');
     expect($schema->toArray()['properties'])->toHaveLength(13);
 });
+
+class SignedStringCastOnlyData extends Data
+{
+    public function __construct(
+        #[WithCast(SignedStringCastTransformer::class)]
+        public ?\NicoAndra\OpenApiGenerator\Test\SignedStringData $payload,
+    ) {}
+}

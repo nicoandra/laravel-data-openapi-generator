@@ -6,6 +6,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use NicoAndra\OpenApiGenerator\Attributes\CustomContentType;
+use NicoAndra\OpenApiGenerator\Data\Cast\SignedStringCastTransformer;
 use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -82,6 +83,26 @@ class Schema extends Data
 
         /** @var null|string */
         $data_class = $type->dataClass;
+
+        $has_signed_string_cast        = $property->cast instanceof SignedStringCastTransformer;
+        $has_signed_string_transformer = $property->transformer instanceof SignedStringCastTransformer;
+
+        if ($has_signed_string_cast xor $has_signed_string_transformer) {
+            throw new RuntimeException(
+                sprintf(
+                    'Attribute %s::%s requires SignedStringCastTransformer to be configured as both a cast and transformer; configuring only one is unsupported.',
+                    $reflection->getDeclaringClass()->getName(),
+                    $reflection->getName(),
+                )
+            );
+        }
+
+        if ($has_signed_string_cast && $has_signed_string_transformer) {
+            return new self(
+                type: 'string',
+                nullable: $type->isNullable || $type->isOptional,
+            );
+        }
 
         if ($type->kind->isDataObject() && $data_class) {
             return self::fromData($data_class, $type->isNullable || $type->isOptional);
