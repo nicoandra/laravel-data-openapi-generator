@@ -55,6 +55,17 @@ it('rejects non-string cast input', function () {
         ->toThrow(InvalidArgumentException::class, 'Signed string input must be a string or null.');
 });
 
+it('rejects arrays, objects, and scalar non-strings before hydration', function (mixed $input) {
+    expect(fn () => SignedStringContainerData::from(['payload' => $input]))
+        ->toThrow(InvalidArgumentException::class, 'Signed string input must be a string or null.');
+})->with([
+    'array'   => [['value' => 'Ada']],
+    'object'  => [(object) ['value' => 'Ada']],
+    'integer' => [42],
+    'float'   => [42.5],
+    'boolean' => [true],
+]);
+
 it('rejects non-Data values during transformation', function () {
     $adapter  = new SignedStringCastTransformer();
     $property = propertyFor(SignedStringContainerData::class);
