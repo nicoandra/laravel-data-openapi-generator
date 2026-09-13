@@ -124,4 +124,11 @@ return [
     |
     */
     'error_scheme_class' => \NicoAndra\OpenApiGenerator\Data\Error::class,
+
+    // Signed-string codec policy. Version 1 is capped at 24 hours.
+    'signed_string' => [
+        'default_ttl'   => 86400,
+        'active_key_id' => 'app',
+        'key_ring'      => [], // Empty derives the key from config('app.key').
+    ],
 ];
