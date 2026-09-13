@@ -88,13 +88,32 @@ it('schemas with ignored properties should exclude them from request properties 
     ]);
 });
 
-it('represents paired signed string casts as strings', function () {
+it('represents paired signed string casts as strings while unmarked data remains a ref', function () {
+    config()->set('openapi-generator.signed_string', [
+        'key_ring'      => ['test' => str_repeat('s', 32)],
+        'active_key_id' => 'test',
+    ]);
+
     $schema = Schema::fromDataClass(SignedStringContainerData::class)->toArray();
 
     expect($schema['properties']['payload'])->toBe([
         'type'     => 'string',
         'nullable' => true,
     ]);
+
+    expect($schema['properties']['optionalPayload'])->toBe([
+        'type'     => 'string',
+        'nullable' => true,
+    ]);
+
+    expect($schema['properties']['unmarkedPayload'])->toBe([
+        'nullable' => true,
+        'allOf'    => [
+            ['$ref' => '#/components/schemas/PublicName.SubPackage.SignedStringData'],
+        ],
+    ]);
+
+    expect($schema)->not->toHaveKey('required');
 });
 
 it('rejects a signed string cast without its transformer', function () {

@@ -11,5 +11,8 @@ class SignedStringContainerData extends Data
     public function __construct(
         #[WithCastAndTransformer(SignedStringCastTransformer::class)]
         public ?SignedStringData $payload,
+        #[WithCastAndTransformer(SignedStringCastTransformer::class)]
+        public ?SignedStringData $optionalPayload = null,
+        public ?SignedStringData $unmarkedPayload = null,
     ) {}
 }
