@@ -107,6 +107,50 @@ php artisan openapi:generate
 
 By default the generated file is written to `resources/api/openapi.json`.
 
+## Signed strings
+
+Signed strings carry a nested `Spatie\LaravelData\Data` object as a compact, authenticated, expiring string. Use `SignedStringCastTransformer` on a property when the API should expose that object as one string instead of an inline object:
+
+```php
+<?php
+
+namespace App\Data;
+
+use NicoAndra\OpenApiGenerator\Data\Cast\SignedStringCastTransformer;
+use Spatie\LaravelData\Attributes\WithCastAndTransformer;
+use Spatie\LaravelData\Data;
+
+class SignedPayloadData extends Data
+{
+    public function __construct(
+        public string $email,
+        public ?string $purpose = null,
+    ) {}
+}
+
+class CreateLinkData extends Data
+{
+    public function __construct(
+        #[WithCastAndTransformer(SignedStringCastTransformer::class)]
+        public ?SignedPayloadData $payload,
+    ) {}
+}
+```
+
+Configure the signing key in `config/openapi-generator.php` (the default is `config('app.key')`):
+
+```php
+'signed_string' => [
+    'default_ttl'   => 86400,
+    'active_key_id' => 'app',
+    'key_ring'      => [],
+],
+```
+
+On input, the cast verifies the token before hydrating the nested `Data` object. On output, the transformer encodes the object deterministically. For request-bound signed fields, let Laravel Data hydrate the request so the cast receives the original string token and verifies it. Do not use `SignedClass::from($request->toArray())`: converting the request to an ordinary array removes the request-vs-code distinction at this trust boundary. For trusted programmatic construction, use `new SignedClass(...)` with the nested `Data` object, not `SignedClass::from(array [...])`. This is a usage rule; the cast cannot automatically distinguish every call origin. The codec accepts positive integer TTLs or parseable `CarbonInterval` strings, capped at 24 hours; invalid or non-positive overrides use the configured default. Tokens are authenticated with HMAC-SHA-256 and expire, but are not single-use: v1 has no nonce or replay store, so a valid unexpired token can be retried.
+
+A key ring supports rotation: issue with `active_key_id` while retaining previous key IDs for verification. The token's `kid` selects the verification key. Keep old keys configured until all tokens issued with them have expired; changing or removing a key makes those tokens invalid. The v1 prefix and envelope version are protocol identifiers, not application API versions. See [the signed-string wire contract](docs/SIGNED_STRING_WIRE_CONTRACT.md) for the exact format, validation rules, transport guidance, and OpenAPI limitations.
+
 ## Generated routes
 
 The package registers two routes:

@@ -46,10 +46,11 @@
         ],
         "test-docker": [
             "docker-compose run --rm php vendor/bin/pest"
-        ]        
+        ]
     },
     "require": {
         "php": ">=8.2",
+        "nesbot/carbon": "^2.0|^3.0",
         "spatie/laravel-data": "^4",
         "phpdocumentor/reflection-docblock": "^5.4",
         "spatie/invade": "^2",
