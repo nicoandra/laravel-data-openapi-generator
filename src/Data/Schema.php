@@ -296,7 +296,9 @@ class Schema extends Data
     {
         $docs = $reflection->getDocComment();
         if (! $docs) {
-            throw new RuntimeException('Could not find required docblock of method/property ' . $reflection->getName());
+            throw new RuntimeException(
+                'Could not find required docblock of method/property ' . self::getReflectionLocation($reflection)
+            );
         }
 
         $docblock = DocBlockFactory::createInstance()->create($docs);
@@ -309,7 +311,9 @@ class Schema extends Data
 
         /** @var null|Return_|Var_ $tag */
         if (! $tag) {
-            throw new RuntimeException('Could not find required tag in docblock of method/property ' . $reflection->getName());
+            throw new RuntimeException(
+                'Could not find required tag in docblock of method/property ' . self::getReflectionLocation($reflection)
+            );
         }
 
         $tag_type = $tag->getType();
@@ -325,6 +329,28 @@ class Schema extends Data
             items: self::fromDataReflection($class),
             nullable: $nullable,
         );
+    }
+
+    protected static function getReflectionLocation(ReflectionMethod|ReflectionFunction|ReflectionProperty $reflection): string
+    {
+        $location = $reflection instanceof ReflectionFunction
+            ? $reflection->getName()
+            : $reflection->getDeclaringClass()->getName() . '::' . $reflection->getName();
+
+        $file = $reflection instanceof ReflectionFunction || $reflection instanceof ReflectionMethod
+            ? $reflection->getFileName()
+            : $reflection->getDeclaringClass()->getFileName();
+        if ($file) {
+            $location .= ' (' . $file;
+
+            if ($reflection instanceof ReflectionFunction || $reflection instanceof ReflectionMethod) {
+                $location .= ':' . $reflection->getStartLine();
+            }
+
+            $location .= ')';
+        }
+
+        return $location;
     }
 
     protected static function fromArray(string $type, bool $nullable): self

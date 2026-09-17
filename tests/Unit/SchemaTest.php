@@ -39,6 +39,38 @@ it('can create array schema', function () {
     }
 });
 
+it('identifies the member when a docblock is missing', function () {
+    $reflection = new ReflectionMethod(Controller::class, 'arrayFail');
+
+    expect(fn () => Schema::fromDataReflection('array', $reflection))
+        ->toThrow(
+            RuntimeException::class,
+            sprintf(
+                'Could not find required docblock of method/property %s::%s (%s:%d)',
+                Controller::class,
+                $reflection->getName(),
+                $reflection->getFileName(),
+                $reflection->getStartLine(),
+            )
+        );
+});
+
+it('identifies the member when a required tag is missing', function () {
+    $reflection = new ReflectionMethod(SchemaDocblockFixture::class, 'withoutRequiredTag');
+
+    expect(fn () => Schema::fromDataReflection('array', $reflection))
+        ->toThrow(
+            RuntimeException::class,
+            sprintf(
+                'Could not find required tag in docblock of method/property %s::%s (%s:%d)',
+                SchemaDocblockFixture::class,
+                $reflection->getName(),
+                $reflection->getFileName(),
+                $reflection->getStartLine(),
+            )
+        );
+});
+
 it('can create int enum schema', function () {
     expect(Schema::fromDataReflection(IntEnum::class)->toArray())
         ->toBe([
@@ -126,6 +158,15 @@ it('can create data schema', function () {
     expect($schema)->toHaveProperty('type', 'object');
     expect($schema->toArray()['properties'])->toHaveLength(13);
 });
+
+class SchemaDocblockFixture
+{
+    /** This docblock intentionally has no required tag. */
+    public function withoutRequiredTag(): array
+    {
+        return [];
+    }
+}
 
 class SignedStringCastOnlyData extends Data
 {
