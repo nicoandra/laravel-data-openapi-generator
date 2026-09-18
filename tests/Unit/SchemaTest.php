@@ -1,8 +1,11 @@
 <?php
 
+use NicoAndra\OpenApiGenerator\Data\Cast\SignedStringCastTransformer;
 use NicoAndra\OpenApiGenerator\Data\OpenApi;
 use NicoAndra\OpenApiGenerator\Data\Schema;
 use NicoAndra\OpenApiGenerator\Test\ContentTypeData;
+use NicoAndra\OpenApiGenerator\Test\ExposedAsPropertyData;
+use NicoAndra\OpenApiGenerator\Test\ExposedAsStringData;
 use NicoAndra\OpenApiGenerator\Test\Controller;
 use NicoAndra\OpenApiGenerator\Test\IntEnum;
 use NicoAndra\OpenApiGenerator\Test\RequestData;
@@ -35,6 +38,38 @@ it('can create array schema', function () {
     }
 });
 
+it('identifies the member when a docblock is missing', function () {
+    $reflection = new ReflectionMethod(Controller::class, 'arrayFail');
+
+    expect(fn () => Schema::fromDataReflection('array', $reflection))
+        ->toThrow(
+            RuntimeException::class,
+            sprintf(
+                'Could not find required docblock of method/property %s::%s (%s:%d)',
+                Controller::class,
+                $reflection->getName(),
+                $reflection->getFileName(),
+                $reflection->getStartLine(),
+            )
+        );
+});
+
+it('identifies the member when a required tag is missing', function () {
+    $reflection = new ReflectionMethod(SchemaDocblockFixture::class, 'withoutRequiredTag');
+
+    expect(fn () => Schema::fromDataReflection('array', $reflection))
+        ->toThrow(
+            RuntimeException::class,
+            sprintf(
+                'Could not find required tag in docblock of method/property %s::%s (%s:%d)',
+                SchemaDocblockFixture::class,
+                $reflection->getName(),
+                $reflection->getFileName(),
+                $reflection->getStartLine(),
+            )
+        );
+});
+
 it('can create int enum schema', function () {
     expect(Schema::fromDataReflection(IntEnum::class)->toArray())
         ->toBe([
@@ -48,6 +83,24 @@ it('can create string enum schema', function () {
         ->toBe([
             'type' => 'string',
             'enum' => ['one'],
+        ]);
+});
+
+it('exposes classes as strings in their schema', function () {
+    expect(Schema::fromDataReflection(ExposedAsStringData::class)->toArray())
+        ->toBe([
+            'type' => 'string',
+        ]);
+});
+
+it('exposes properties as strings in their containing schema', function () {
+    expect(Schema::fromDataClass(ExposedAsPropertyData::class)->toArray())
+        ->toBe([
+            'type' => 'object',
+            'properties' => [
+                'value' => ['type' => 'string'],
+            ],
+            'required' => ['value'],
         ]);
 });
 
@@ -87,5 +140,15 @@ it('schemas with ignored properties should exclude them from request properties 
 it('can create data schema', function () {
     $schema = Schema::fromDataClass(RequestData::class);
     expect($schema)->toHaveProperty('type', 'object');
-    expect($schema->toArray()['properties'])->toHaveLength(13);
+    expect($schema->toArray()['properties'])->toHaveLength(15);
 });
+
+class SchemaDocblockFixture
+{
+    /** This docblock intentionally has no required tag. */
+    public function withoutRequiredTag(): array
+    {
+        return [];
+    }
+}
+

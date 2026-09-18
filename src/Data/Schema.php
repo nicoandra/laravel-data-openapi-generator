@@ -6,6 +6,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use NicoAndra\OpenApiGenerator\Attributes\CustomContentType;
+use NicoAndra\OpenApiGenerator\Attributes\ExposedAs;
 use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -80,8 +81,32 @@ class Schema extends Data
 
         $type = $property->type;
 
+        $exposedAsAttribute = $reflection->getAttributes(ExposedAs::class);
+        if (count($exposedAsAttribute) > 0) {
+            /** @var ExposedAs $instance */
+            $instance = $exposedAsAttribute[0]->newInstance();
+
+            return new self(
+                type: $instance->getExposedAs(),
+                nullable: $type->isNullable || $type->isOptional,
+            );
+        }
+
         /** @var null|string */
         $data_class = $type->dataClass;
+
+        if ($data_class) {
+            $classAttributes = (new ReflectionClass($data_class))->getAttributes(ExposedAs::class);
+            if (count($classAttributes) > 0) {
+                /** @var ExposedAs $instance */
+                $instance = $classAttributes[0]->newInstance();
+
+                return new self(
+                    type: $instance->getExposedAs(),
+                    nullable: $type->isNullable || $type->isOptional,
+                );
+            }
+        }
 
         if ($type->kind->isDataObject() && $data_class) {
             return self::fromData($data_class, $type->isNullable || $type->isOptional);
@@ -119,10 +144,30 @@ class Schema extends Data
 
         if ($is_class) {
             $type_class = new ReflectionClass($type_name);
-            $attributes = $type_class->getAttributes(CustomContentType::class);
-            if (count($attributes) > 0) {
+
+            // Logic here, if this class implements Nicoandra\OpenapiGenerator\Interfaces\OpenapiAsStringInterface, return type "string"
+            /*
+                return new self(
+                    type: 'string',
+                    nullable: $type->isNullable || $type->isOptional,
+                );
+            */
+
+            $exposedAsAttribute = $type_class->getAttributes(ExposedAs::class);
+            if (count($exposedAsAttribute) > 0) {
+                /** @var ExposedAs $instance */
+                $instance = $exposedAsAttribute[0]->newInstance();
+
+                return new self(
+                    type: $instance->getExposedAs(),
+                    nullable: $nullable
+                );
+            }
+
+            $contentTypeAttributes = $type_class->getAttributes(CustomContentType::class);
+            if (count($contentTypeAttributes) > 0) {
                 /** @var CustomContentType $instance */
-                $instance = $attributes[0]->newInstance();
+                $instance = $contentTypeAttributes[0]->newInstance();
                 if ($instance->isBinary) {
                     return new self(
                         type: 'string',
@@ -275,7 +320,9 @@ class Schema extends Data
     {
         $docs = $reflection->getDocComment();
         if (! $docs) {
-            throw new RuntimeException('Could not find required docblock of method/property ' . $reflection->getName());
+            throw new RuntimeException(
+                'Could not find required docblock of method/property ' . self::getReflectionLocation($reflection)
+            );
         }
 
         $docblock = DocBlockFactory::createInstance()->create($docs);
@@ -288,7 +335,9 @@ class Schema extends Data
 
         /** @var null|Return_|Var_ $tag */
         if (! $tag) {
-            throw new RuntimeException('Could not find required tag in docblock of method/property ' . $reflection->getName());
+            throw new RuntimeException(
+                'Could not find required tag in docblock of method/property ' . self::getReflectionLocation($reflection)
+            );
         }
 
         $tag_type = $tag->getType();
@@ -304,6 +353,28 @@ class Schema extends Data
             items: self::fromDataReflection($class),
             nullable: $nullable,
         );
+    }
+
+    protected static function getReflectionLocation(ReflectionMethod|ReflectionFunction|ReflectionProperty $reflection): string
+    {
+        $location = $reflection instanceof ReflectionFunction
+            ? $reflection->getName()
+            : $reflection->getDeclaringClass()->getName() . '::' . $reflection->getName();
+
+        $file = $reflection instanceof ReflectionFunction || $reflection instanceof ReflectionMethod
+            ? $reflection->getFileName()
+            : $reflection->getDeclaringClass()->getFileName();
+        if ($file) {
+            $location .= ' (' . $file;
+
+            if ($reflection instanceof ReflectionFunction || $reflection instanceof ReflectionMethod) {
+                $location .= ':' . $reflection->getStartLine();
+            }
+
+            $location .= ')';
+        }
+
+        return $location;
     }
 
     protected static function fromArray(string $type, bool $nullable): self

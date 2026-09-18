@@ -5,6 +5,7 @@ namespace NicoAndra\OpenApiGenerator\Test;
 use DateTime;
 use DateTimeInterface;
 use NicoAndra\OpenApiGenerator\Attributes\Example;
+use NicoAndra\OpenApiGenerator\Attributes\ExposedAs;
 use Spatie\LaravelData\Data;
 
 class RequestData extends Data
@@ -24,6 +25,10 @@ class RequestData extends Data
         public ?ReturnData $nullable_other,
         public DateTimeInterface $date,
         public ?DateTimeInterface $nullable_date,
+        #[ExposedAs('string')]
+        public ReturnData $dataAsString,
+        public ExposedAsStringData $exposedAsStringData,
+
     ) {}
 
     public static function create(): self
@@ -42,6 +47,9 @@ class RequestData extends Data
             nullable_other: null,
             date: new DateTime(),
             nullable_date: null,
+            dataAsString: new ReturnData(),
+            exposedAsStringData: new ExposedAsStringData()
+
         );
     }
 }
