@@ -14,6 +14,7 @@ The package treats your controllers and `Data` objects as the source of truth fo
 - Supports `#[IgnoreFromOpenApi]` on request properties, controller classes, and controller methods, to keep utility methods from being exposed to the public.
 - Supports custom response status codes through `#[HttpResponseStatus(...)]`.
 - Supports multiple content types through `#[CustomContentType(...)]`.
+- Supports exposing transformed or cast `Data` classes and properties as OpenAPI scalar types through `#[ExposedAs(...)]`.
 - Adds security requirements and `401` / `403` responses from configured middleware.
 - Allows namespace aliasing so generated schema names do not leak internal class structure.
 - Exposes both a JSON endpoint and a Swagger UI page.
@@ -165,6 +166,39 @@ class ExportData extends Data
     // ...
 }
 ```
+
+### `#[ExposedAs(...)]`
+
+Use `#[ExposedAs('string')]` when a transformed or cast value should be represented as a string in the generated OpenAPI schema, even when its PHP type is a `Data` class.
+
+The attribute can be applied to a `Data` class:
+
+```php
+use NicoAndra\OpenApiGenerator\Attributes\ExposedAs;
+use Spatie\LaravelData\Data;
+
+#[ExposedAs('string')]
+class TransformedValueData extends Data
+{
+    public function __construct(
+        public string $value,
+    ) {}
+}
+```
+
+It can also be applied to a property whose runtime representation is a string:
+
+```php
+class ResponseData extends Data
+{
+    public function __construct(
+        #[ExposedAs('string')]
+        public TransformedValueData $value,
+    ) {}
+}
+```
+
+In both cases, the generated schema uses `type: string` instead of an object reference. The attribute describes the value's exposed representation; it does not change runtime casting or transformation behavior.
 
 ### `#[Tags(...)]`
 

@@ -6,7 +6,7 @@ update:
 	docker-compose run -e XEBUG_MODE=off --rm openapi-generator composer update
 
 test:
-	docker-compose run -e XEBUG_MODE=off --build --rm -v $(PWD):/var/www/html openapi-generator composer run test
+	docker-compose run -e XEBUG_MODE=debug --rm -v $(PWD):/var/www/html openapi-generator composer run test
 
 test-coverage:
 	docker-compose run --rm -v $(PWD):/var/www/html openapi-generator composer run test-coverage
