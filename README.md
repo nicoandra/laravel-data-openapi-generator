@@ -14,6 +14,7 @@ The package treats your controllers and `Data` objects as the source of truth fo
 - Supports `#[IgnoreFromOpenApi]` on request properties, controller classes, and controller methods, to keep utility methods from being exposed to the public.
 - Supports custom response status codes through `#[HttpResponseStatus(...)]`.
 - Supports multiple content types through `#[CustomContentType(...)]`.
+- Supports documenting transformed or cast `Data` values as OpenAPI scalar types through `#[ExposedAs(...)]` without changing runtime casting.
 - Adds security requirements and `401` / `403` responses from configured middleware.
 - Allows namespace aliasing so generated schema names do not leak internal class structure.
 - Exposes both a JSON endpoint and a Swagger UI page.
@@ -165,6 +166,39 @@ class ExportData extends Data
     // ...
 }
 ```
+
+### `#[ExposedAs(...)]`
+
+Use `#[ExposedAs('string')]` to document a transformed or cast value as an OpenAPI string. The constructor currently accepts only the literal value `'string'`; the attribute changes the generated OpenAPI representation, not runtime casting or transformation behavior.
+
+At class level, apply it to a `Data` class whose generated schema should be a string instead of an object reference:
+
+```php
+use NicoAndra\OpenApiGenerator\Attributes\ExposedAs;
+use Spatie\LaravelData\Data;
+
+#[ExposedAs('string')]
+class TransformedValueData extends Data
+{
+    public function __construct(
+        public string $value,
+    ) {}
+}
+```
+
+At property level, apply it when a property typed as a transformed or cast `Data` value is exposed as a string in the schema:
+
+```php
+class ResponseData extends Data
+{
+    public function __construct(
+        #[ExposedAs('string')]
+        public TransformedValueData $value,
+    ) {}
+}
+```
+
+Although the PHP attribute declaration permits class, property, and parameter targets, documented and generated support currently covers `Data` classes and `Data` properties only. Controller-parameter handling is not currently implemented. In the supported cases, it affects only the generated OpenAPI schema; it does not cast, transform, or otherwise change the runtime value.
 
 ### `#[Tags(...)]`
 
