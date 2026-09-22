@@ -1,12 +1,11 @@
 <?php
 
-use NicoAndra\OpenApiGenerator\Data\Cast\SignedStringCastTransformer;
 use NicoAndra\OpenApiGenerator\Data\OpenApi;
 use NicoAndra\OpenApiGenerator\Data\Schema;
 use NicoAndra\OpenApiGenerator\Test\ContentTypeData;
+use NicoAndra\OpenApiGenerator\Test\Controller;
 use NicoAndra\OpenApiGenerator\Test\ExposedAsPropertyData;
 use NicoAndra\OpenApiGenerator\Test\ExposedAsStringData;
-use NicoAndra\OpenApiGenerator\Test\Controller;
 use NicoAndra\OpenApiGenerator\Test\IntEnum;
 use NicoAndra\OpenApiGenerator\Test\RequestData;
 use NicoAndra\OpenApiGenerator\Test\RequestDataWithIgnoredProperty;
@@ -96,7 +95,7 @@ it('exposes classes as strings in their schema', function () {
 it('exposes properties as strings in their containing schema', function () {
     expect(Schema::fromDataClass(ExposedAsPropertyData::class)->toArray())
         ->toBe([
-            'type' => 'object',
+            'type'       => 'object',
             'properties' => [
                 'value' => ['type' => 'string'],
             ],
@@ -151,4 +150,3 @@ class SchemaDocblockFixture
         return [];
     }
 }
-

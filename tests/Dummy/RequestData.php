@@ -28,7 +28,6 @@ class RequestData extends Data
         #[ExposedAs('string')]
         public ReturnData $dataAsString,
         public ExposedAsStringData $exposedAsStringData,
-
     ) {}
 
     public static function create(): self
@@ -49,7 +48,6 @@ class RequestData extends Data
             nullable_date: null,
             dataAsString: new ReturnData(),
             exposedAsStringData: new ExposedAsStringData()
-
         );
     }
 }
