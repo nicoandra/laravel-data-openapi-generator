@@ -12,6 +12,7 @@ use NicoAndra\OpenApiGenerator\Test\RequestDataWithIgnoredProperty;
 use NicoAndra\OpenApiGenerator\Test\RequestDataWithRouteParameter;
 use NicoAndra\OpenApiGenerator\Test\ReturnData;
 use NicoAndra\OpenApiGenerator\Test\StringEnum;
+use NicoAndra\OpenApiGenerator\Test\UnionTypeData;
 use Spatie\LaravelData\DataCollection;
 
 it('can create built-in schema', function () {
@@ -140,6 +141,14 @@ it('can create data schema', function () {
     $schema = Schema::fromDataClass(RequestData::class);
     expect($schema)->toHaveProperty('type', 'object');
     expect($schema->toArray()['properties'])->toHaveLength(15);
+});
+
+it('describes unsupported union type properties', function () {
+    expect(fn () => Schema::fromDataClass(UnionTypeData::class))
+        ->toThrow(
+            RuntimeException::class,
+            'Cannot create schema for ' . UnionTypeData::class . '::$value: encountered unsupported Spatie type Spatie\\LaravelData\\Support\\Types\\UnionType. UnionType support is not implemented yet.',
+        );
 });
 
 class SchemaDocblockFixture

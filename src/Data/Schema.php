@@ -26,6 +26,7 @@ use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Support\Factories\DataPropertyFactory;
 use Spatie\LaravelData\Support\Transformation\TransformationContext;
 use Spatie\LaravelData\Support\Transformation\TransformationContextFactory;
+use Spatie\LaravelData\Support\Types\NamedType;
 use UnitEnum;
 
 class Schema extends Data
@@ -113,6 +114,15 @@ class Schema extends Data
         }
         if ($type->kind->isDataCollectable() && $data_class) {
             return self::fromDataCollection($data_class, $type->isNullable || $type->isOptional);
+        }
+
+        if (! $type->type instanceof NamedType) {
+            throw new RuntimeException(sprintf(
+                'Cannot create schema for %s::$%s: encountered unsupported Spatie type %s. UnionType support is not implemented yet.',
+                $reflection->getDeclaringClass()->getName(),
+                $reflection->getName(),
+                $type->type::class,
+            ));
         }
 
         return self::fromDataReflection(type_name: $type->type->name, reflection: $reflection, nullable: $type->isNullable);
